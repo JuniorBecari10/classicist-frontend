@@ -2,7 +2,7 @@
     import { ref } from "vue";
 
     let isHello = ref(true);
-    const flip = () => isHello.value ^= true;
+    const flip = () => isHello.value !== true;
 </script>
 
 <template>
