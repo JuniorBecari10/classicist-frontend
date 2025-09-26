@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ref } from "vue";
-
+    import "./player.vue";
     let isHello = ref(true);
     const flip = () => isHello.value !== true;
 </script>
@@ -14,7 +14,7 @@
         @click="flip">
         Change
     </button>
-
+    <comp></comp>
     <h1 class="text-3xl font-fredoka font-bold"
         v-if="isHello">Hello</h1>
     <h1 class="text-3xl font-fredoka font-bold"
