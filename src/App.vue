@@ -32,15 +32,15 @@
 
       <div class="box-border flex-1  flex">
 
-        <div class="w-1/3 bg-red-500 h-full m-2 rounded-md mt-0 ">
-          <button class="box-border bg-[#3c3c3c]"><img class="mr-3 w-4" src="./assets/home.png"></button>
+        <div class="flex-1 bg-red-500 h-full m-2 rounded-md mt-0 ">
+          <button class=" size-8 box-content md:box-border rounded-md bg-[#3c3c3c] cursor-pointer"><img class="mr-3 w-4 flex itens-center justify-center" src="./assets/home.png"></button>
           
         </div>
 
-        <div class="w-full bg-blue-500 h-full m-2 rounded-md mt-0"></div>
+        <div class="flex-3 bg-blue-500 h-full m-2 rounded-md mt-0"></div>
       </div>
       
-      <div class="w-full h-10  bg-green-500 m-2 rounded-md  "></div>
+      <div class="h-10  bg-green-500 m-2 rounded-md  "></div>
 
   </div>
 </template>
