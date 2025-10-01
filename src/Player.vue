@@ -2,7 +2,5 @@
 
 </script>
 <template>
-    <h1>Teste</h1>
-  
-  
+    <div class="m-3 h-10 bg-[#252525]"></div>
 </template>
