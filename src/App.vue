@@ -1,6 +1,9 @@
 <script>
-import { player } from "./assets/player.vue";
+  import {Player} from "Player.vue"
+
 </script>
 <template>
-  <player></player>
+ <Player></Player>
+  <h1>Teste</h1>
+  
 </template>
