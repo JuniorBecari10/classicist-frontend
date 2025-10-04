@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import Comp from "./Comp.vue";
+import Composer from "./Composer.vue";
 </script>
 
 <template>
-    <Comp></Comp>
+    <Composer></Composer>
 </template>

@@ -2,9 +2,9 @@
 @import "tailwindcss";
 
 body {
-    @apply bg-black text-white;
+  @apply bg-[#252525] text-white;
 }
 
 @theme {
-    --font-fredoka: "Fredoka", sans-serif;
+  --font-fredoka: "Fredoka", sans-serif;
 }
