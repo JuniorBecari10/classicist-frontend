@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Composer from "./Composer.vue";
+import Composer from "./components/Composer.vue";
 </script>
 
 <template>
