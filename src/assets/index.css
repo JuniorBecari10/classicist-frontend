@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap");
 @import "tailwindcss";
 
+* {
+    @apply box-border select-none;
+}
+
 body {
     @apply bg-black text-white;
 }
 
 @theme {
     --font-fredoka: "Fredoka", sans-serif;
+
+    --color-fg: #252525;
+    --color-fg-lighter: #3C3C3C;
+
+    --color-fgray: #B8B8B8;
 }
