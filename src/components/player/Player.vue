@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { ref, computed } from "vue";
     import Current from "./Current.vue";
     import { Option } from "@/model/option.ts";
 
@@ -9,24 +9,27 @@
         nickname: Option.none(),
     } satisfies WorkTitle);
 
-    const displayWork = {
-        title: workTitle,
+    const displayWork = computed(() => ({
+        title: workTitle.value,
         movement: "Allegro con brio",
-    } satisfies DisplayWork;
+    } satisfies DisplayWork));
 
-    const performers = ref([
+    const performers = ref<Performer[]>([
         {
-            id: 0,
-            name: "Herbert von Karajan",
+          id: 0,
+          name: "Herbert von Karajan",
         },
-    ] satisfies Performer[]);
-    
+    ]);
 </script>
 
 <template>
     <div class="w-full p-5">
         <div class="w-full h-20 bg-fg rounded-lg">
-            <Current :work="displayWork" composer="Ludwig van Beethoven" :performers="performers" />
+            <Current
+                :work="displayWork"
+                composer="Ludwig van Beethoven"
+                :performers="performers"
+            />
         </div>
     </div>
 </template>
