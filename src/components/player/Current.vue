@@ -6,6 +6,8 @@
         composer: string;
         performers: Performer[];
     }>();
+
+    console.log(props.work);
 </script>
 
 <template>
