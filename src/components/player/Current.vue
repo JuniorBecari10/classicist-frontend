@@ -1,13 +1,16 @@
 <script setup lang="ts">
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
+    import { computed } from "vue";
 
     const props = defineProps<{
         work: DisplayWork;
-        composer: string;
+        composer: Composer;
         performers: Performer[];
+        imageName: string;
     }>();
 
-    console.log(props.work);
+    const name = computed(() => formatDisplayWork(props.work));
+    const authors = computed(() => formatDisplayAuthors(props.composer, props.performers));
 </script>
 
 <template>
@@ -16,8 +19,8 @@
             class="size-15 mr-5 rounded-lg">
 
         <div class="flex flex-col justify-center items-start w-1/6 truncate">
-            <span class="font-fredoka font-semibold text-lg">{{ formatDisplayWork(props.work) }}</span>
-            <span class="font-fredoka text-fgray text-sm">{{ formatDisplayAuthors() }}</span>
+            <span class="font-fredoka font-semibold text-lg" :title="name">{{ name }}</span>
+            <span class="font-fredoka text-fgray text-sm" :title="authors">{{ authors }}</span>
         </div>
 
         <div class="relative right-12 size-12 bg-linear-to-r from-transparent to-fg"></div>
