@@ -1,5 +1,3 @@
-import type { Option } from "./option";
-
 enum Note {
     C,
     CSharp,
@@ -24,6 +22,8 @@ enum KeyMode {
     Major,
     Minor,
 }
+
+type Option<T> = T | null;
 
 export interface WorkTitle {
     kind: string;
