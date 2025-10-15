@@ -1,22 +1,20 @@
 <script setup lang="ts">
-    import { ref, computed } from "vue";
+    import { ref } from "vue";
     import Current from "./Current.vue";
-    import { Option } from "@/model/option.ts";
 
     const workTitle = ref({
         kind: "Symphony",
-        number: Option.some(5),
-        nickname: Option.none(),
+        number: 5,
+        nickname: "Fate",
     } satisfies WorkTitle);
 
-    const displayWork = computed(() => ({
+    const displayWork = ref({
         title: workTitle.value,
         movement: "Allegro con brio",
-    } satisfies DisplayWork));
+    } satisfies DisplayWork);
 
     const performers = ref<Performer[]>([
         {
-          id: 0,
           name: "Herbert von Karajan",
         },
     ]);
@@ -27,7 +25,7 @@
         <div class="w-full h-20 bg-fg rounded-lg">
             <Current
                 :work="displayWork"
-                composer="Ludwig van Beethoven"
+                :composer="{ name: 'Ludwig van Beethoven' }"
                 :performers="performers"
             />
         </div>

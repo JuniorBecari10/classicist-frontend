@@ -3,11 +3,8 @@ import type { Performer } from "@/model/recording.ts";
 
 function formatTitleDisplay(title: WorkTitle): string {
     return `${title.kind} No. ${title.number}${
-        title.number.isSome()
-            ? `• "${title.nickname.unwrap()}"`
-            : ""
-    }
-`
+        title.nickname ? ` • "${title.nickname}"` : ""
+    }`;
 }
 
 export function formatDisplayWork(dw: DisplayWork): string {
@@ -15,10 +12,5 @@ export function formatDisplayWork(dw: DisplayWork): string {
 }
 
 export function formatDisplayAuthors(composer: Composer, performers: Performer[]): string {
-    return `${composer.name} | ${performers.forEach((perf, i, _) =>
-        `${perf.name}${
-            i < performers.length - 1
-                ? ", "
-                : ""
-        }`)}`
+    return `${composer.name} | ${performers.map(p => p.name).join(", ")}`;
 }
