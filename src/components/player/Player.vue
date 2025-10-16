@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import Current from "./Current.vue";
+    import Progress from "./Progress.vue";
 
     const workTitle = ref({
         kind: "Symphony",
@@ -27,6 +28,10 @@
                 :work="displayWork"
                 :composer="{ name: 'Ludwig van Beethoven' }"
                 :performers="performers"
+                 imageName="image.png"
+            />
+            <Progress
+                :length="320"
             />
         </div>
     </div>
