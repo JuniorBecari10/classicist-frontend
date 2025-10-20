@@ -87,4 +87,5 @@ interface Work {
 export interface DisplayWork {
     title: WorkTitle;
     movement: string;
+    mov_num: number;
 }
