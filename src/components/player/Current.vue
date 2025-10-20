@@ -14,7 +14,7 @@
 </script>
 
 <template>
-    <div class="h-full w-1/4 flex items-center ml-5">
+    <div class="w-1/4 h-full flex items-center ml-5">
         <img src="https://github.com/JuniorBecari10/classicist-public/blob/main/files/images/covers/symp5.jpg?raw=true"
             class="size-15 mr-5 rounded-lg">
 
@@ -23,6 +23,7 @@
             <span class="font-fredoka text-fgray text-sm" :title="authors">{{ authors }}</span>
         </div>
 
-        <div class="relative right-8 size-12 bg-linear-to-r from-transparent to-fg"></div>
+        <div class="relative right-7 size-12 bg-linear-to-r from-transparent to-fg"></div>
+        <div class="relative right-7 bg-fg size-12"></div>
     </div>
 </template>
