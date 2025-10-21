@@ -43,6 +43,7 @@
         current.value = Math.round(newTime);
     }
 
+    const rewind = () => current.value = 0;
     const togglePause = () => paused.value = !paused.value;
 </script>
 
@@ -50,7 +51,7 @@
     <div class="flex-1 h-full flex flex-col justify-center items-center mx-4">
         <div class="w-full h-1/2 flex justify-center">
             <div class="flex w-1/5 h-full justify-evenly items-center">
-                <button class="hover:bg-fg-lighter p-1.5 transition-[background] duration-200 rounded-md">
+                <button class="hover:bg-fg-lighter p-1.5 transition-[background] duration-200 rounded-md" @click="rewind">
                     <img src="@/assets/images/back.png">
                 </button>
                 <button class="hover:bg-fg-lighter p-1.5 transition-[background] duration-200 rounded-md" @click="togglePause">
