@@ -8,4 +8,5 @@ body {
 
 @theme {
   --font-fredoka: "Fredoka", sans-serif;
+  --font-jetbrains: "Jetbrains Mono", monospace;
 }
