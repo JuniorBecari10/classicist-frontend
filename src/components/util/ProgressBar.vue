@@ -7,6 +7,7 @@
 
     const props = defineProps<{
         percentage: number;
+        disabled?: boolean;
     }>();
 
     const dragging = ref(false);
@@ -46,9 +47,13 @@
 
         <!-- progress bar -->
         <div
-            class="h-full rounded-full bg-white relative bottom-1.5"
+            class="h-full rounded-full relative bottom-1.5"
             :style="{
                 width: `${props.percentage}%`,
+                background:
+                    props.disabled
+                        ? '#B8B8B8'
+                        : '#FFFFFF',
             }">
         </div>
 
@@ -57,13 +62,14 @@
             class="absolute top-1/2 size-3 bg-white rounded-full origin-center transition-[scale,opacity] duration-200
                    transform -translate-y-1/2 scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100"
             :class="{ 'scale-100 opacity-100': dragging }"
-            :style="{ left: `calc(${props.percentage}% - 0.375rem)` }">
+            :style="{ left: `calc(${props.percentage}% - 0.375rem)` }"
+            v-show="!props.disabled">
         </div>
 
         <!-- hitbox for click -->
         <div
             class="relative bottom-6 w-full h-5 cursor-pointer"
-            @click="(e) => emit('seek', getPercentageFromEvent(e, e.currentTarget as HTMLElement))"
+            @click="e => emit('seek', getPercentageFromEvent(e, e.currentTarget as HTMLElement))"
             @mousedown="handleMouseDown">
         </div>
     </div>

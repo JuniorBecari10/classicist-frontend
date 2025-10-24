@@ -2,6 +2,7 @@
     import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
     import { convertFormatTime } from "@/util/format.ts";
     import ProgressBar from "../util/ProgressBar.vue";
+    import Button from "../util/Button.vue";
 
     const props = defineProps<{
         length: number,
@@ -60,6 +61,10 @@
             emit("rewind");
     }
 
+    function forward() {
+        
+    }
+
     function togglePause() {
         paused.value = !paused.value;
 
@@ -97,22 +102,18 @@
     <div class="flex-1 h-full flex flex-col justify-center items-center mx-4">
         <div class="w-full h-1/2 flex justify-center">
             <div class="flex w-1/5 h-full justify-evenly items-center">
-                <button
-                    class="hover:bg-fg-lighter p-1.5 rounded-md"
-                    @click="rewind">
+                <Button :action="rewind">
                     <img class="relative left-0.5" src="@/assets/images/back.png" />
-                </button>
+                </Button>
 
-                <button
-                    class="hover:bg-fg-lighter p-1.5 rounded-md"
-                    @click="togglePause">
+                <Button :action="togglePause">
                     <img v-show="paused" src="@/assets/images/play.png" />
                     <img v-show="!paused" src="@/assets/images/pause.png" />
-                </button>
+                </Button>
 
-                <button class="hover:bg-fg-lighter p-1.5 rounded-md">
+                <Button :action="forward">
                     <img class="relative right-0.5" src="@/assets/images/forward.png" />
-                </button>
+                </Button>
             </div>
         </div>
 
@@ -121,9 +122,9 @@
                 {{ convertFormatTime(current) }}
             </span>
 
-        <div class="w-full mr-6" ref="progressBar">
-            <ProgressBar :percentage="percentage" @seek="handleSeek" />
-        </div>
+            <div class="w-full mr-6" ref="progressBar">
+                <ProgressBar :percentage="percentage" @seek="handleSeek" />
+            </div>
 
             <span class="text-fgray font-jetbrains text-sm">
                 {{ convertFormatTime(props.length) }}
