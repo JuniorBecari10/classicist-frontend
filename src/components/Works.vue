@@ -4,7 +4,7 @@
         <div class="works" :class="{'mb-3': !hidden}" @click.self="flipWork">
             <section class="inline-flex items-center justify-between space-x-5">
 
-                <svg class="scale-150 mr-8 ml-1 transition rotate delay-0.4" :class="hidden ? '' : 'rotate-90'" width="7" height="13" viewBox="0 0 7 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="scale-150 mr-8 ml-1 transition rotate delay-0.4" :class="hidden ? '' : 'rotate-90'" width="7" height="13" viewBox="0 0 7 13" fill="none" xmlns="http://www.w3.org/2000/svg" @click="flipWork">
                     <path d="M1 12L6 6.5L1 1" :stroke="hidden ? 'white' : '#18a0e4'" :stroke-width="hidden ? '1px' : '2px'" stroke-linecap="round"/>
                 </svg>
 
@@ -22,7 +22,7 @@
                     </option>
                 </select>
             </section>
-            <span class="font-jetbrains mt-0.5" :class="hidden ? 'font-light' : 'font-extrabold text-[#18a0e4]'">37:38</span>
+            <span class="font-jetbrains mt-0.5" :class="hidden ? 'font-light' : 'font-extrabold text-[#18a0e4]'" @click="flipWork">37:38</span>
         </div>
 
         <!-- Acts -->
@@ -101,10 +101,10 @@
         height: 3.25rem;
         align-items: center;
         justify-content: space-between;
-        transition: background 2s ease-in-out;
+        transition: background 0.1s ease-in-out;
     }
     .works:hover {
-        background: #ffffff;
+        background: #404040;
         cursor: pointer;
     }
     .acts {
