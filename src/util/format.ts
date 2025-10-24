@@ -9,7 +9,7 @@ function formatTitleDisplay(title: WorkTitle): string {
 }
 
 export function formatDisplayWork(dw: DisplayWork): string {
-    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.mov_num)}. ${dw.movement}`
+    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${dw.movement}`
 }
 
 export function formatDisplayAuthors(composer: Composer, performers: Performer[]): string {

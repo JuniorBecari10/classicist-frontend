@@ -9,7 +9,7 @@
         percentage: number;
     }>();
 
-    const isDragging = ref(false);
+    const dragging = ref(false);
 
     function getPercentageFromEvent(e: MouseEvent, bar: HTMLElement) {
         const rect = bar.getBoundingClientRect();
@@ -24,12 +24,12 @@
     function handleMouseDown(e: MouseEvent) {
         const bar = e.currentTarget as HTMLElement;
 
-        isDragging.value = true;
+        dragging.value = true;
         emit("seek", getPercentageFromEvent(e, bar));
 
         const move = (ev: MouseEvent) => emit("seek", getPercentageFromEvent(ev, bar));
         const up = () => {
-            isDragging.value = false;
+            dragging.value = false;
             window.removeEventListener("mousemove", move);
             window.removeEventListener("mouseup", up);
         };
@@ -47,14 +47,16 @@
         <!-- progress bar -->
         <div
             class="h-full rounded-full bg-white relative bottom-1.5"
-            :style="{ width: `${props.percentage}%` }">
+            :style="{
+                width: `${props.percentage}%`,
+            }">
         </div>
 
         <!-- draggable circle -->
         <div
-            class="absolute top-1/2 size-3 bg-white rounded-full origin-center
+            class="absolute top-1/2 size-3 bg-white rounded-full origin-center transition-[scale,opacity] duration-200
                    transform -translate-y-1/2 scale-0 opacity-0 group-hover:scale-100 group-hover:opacity-100"
-            :class="{ 'scale-100 opacity-100': isDragging }"
+            :class="{ 'scale-100 opacity-100': dragging }"
             :style="{ left: `calc(${props.percentage}% - 0.375rem)` }">
         </div>
 

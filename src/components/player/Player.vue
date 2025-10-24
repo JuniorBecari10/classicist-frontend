@@ -3,6 +3,7 @@
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
+    import { formatDisplayWork } from "@/util/format.ts";
 
     const workTitle = ref({
         kind: "Symphony",
@@ -13,30 +14,68 @@
     const displayWork = ref({
         title: workTitle.value,
         movement: "Allegro con brio",
-        mov_num: 1,
+        movementNumber: 1,
     } satisfies DisplayWork);
 
     const performers = ref<Performer[]>([
         {
-          name: "Herbert von Karajan",
+            name: "Herbert von Karajan",
         },
     ]);
+
+    const audio = ref<HTMLAudioElement | null>(null);
+
+    function handlePlay() {
+        audio.value?.play();
+        document.title = `Playing ${formatDisplayWork(displayWork.value)} ― Classicist`;
+    }
+
+    function handlePause() {
+        audio.value?.pause();
+        document.title = `${formatDisplayWork(displayWork.value)} ― Classicist`;
+    }
+
+    function handleSeek(progress: number) {
+        if (audio.value)
+            audio.value.currentTime = progress;
+    }
+
+    function handleRewind() {
+        if (audio.value)
+            audio.value.currentTime = 0;
+    }
+
+    function handlePrevious() {
+        console.log("TODO!");
+    }
+
+    function handleVolume(percent: number) {
+        if (audio.value)
+            audio.value.volume = percent;
+    }
 </script>
 
 <template>
+    <audio ref="audio" src="http://localhost:8080/public/audio/symp5-1.mp3"></audio>
+
     <div class="w-full p-5">
         <div class="w-full h-22 bg-fg rounded-lg flex items-center">
             <Current
                 :work="displayWork"
                 :composer="{ name: 'Ludwig van Beethoven' }"
                 :performers="performers"
-                 imageName="image.png"
+                 imageName="symp5.jpg"
             />
             <Progress
-                :length="320"
+                :length="433"
+                @pause="handlePause"
+                @play="handlePlay"
+                @seek="handleSeek"
+                @rewind="handleRewind"
+                @previous="handlePrevious"
             />
 
-            <Controls />
+            <Controls @volume="handleVolume" />
         </div>
     </div>
 </template>

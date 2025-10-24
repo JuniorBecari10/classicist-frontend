@@ -1,41 +1,37 @@
 <script setup lang="ts">
-    import { ref, computed, onMounted, onUnmounted } from "vue";
+    import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
     import { convertFormatTime } from "@/util/format.ts";
-    import ProgressBar from "./ProgressBar.vue";
+    import ProgressBar from "../util/ProgressBar.vue";
 
-    const props = defineProps<{ length: number }>();
+    const props = defineProps<{
+        length: number,
+    }>();
+    
+    const emit = defineEmits<{
+        (e: "pause"): void;
+        (e: "play"): void;
+        (e: "seek", progress: number): void;
+        (e: "rewind"): void;
+        (e: "previous"): void;
+    }>();
 
     const current = ref(0);
-    const paused = ref(false);
+    const paused = ref(true);
 
     const percentage = computed(() => (current.value / props.length) * 100);
-    const progressBarRef = ref<HTMLElement | null>(null);
+    const progressBar = ref<HTMLElement | null>(null);
 
     let interval: number | undefined;
 
     onMounted(() => {
         addInterval();
         window.addEventListener("keydown", handleKey);
-        window.addEventListener("mousedown", handleMouseDown);
-        window.addEventListener("mouseup", handleMouseUp);
     });
 
     onUnmounted(() => {
         removeInterval();
         window.removeEventListener("keydown", handleKey);
-        window.removeEventListener("mousedown", handleMouseDown);
-        window.removeEventListener("mouseup", handleMouseUp);
     });
-    
-    function handleMouseDown(e: MouseEvent) {
-        const el = progressBarRef.value;
-        if (el && el.contains(e.target as Node))
-            paused.value = true;
-    }
-
-    function handleMouseUp() {
-        paused.value = false;
-    }
 
     function addInterval() {
         interval = window.setInterval(() => {
@@ -50,11 +46,28 @@
     }
 
     function handleSeek(percent: number) {
-        current.value = Math.round((percent / 100) * props.length);
+        current.value = Math.floor((percent / 100) * props.length);
+        emit("seek", current.value);
     }
 
-    const rewind = () => (current.value = 0);
-    const togglePause = () => (paused.value = !paused.value);
+    function rewind() {
+        const oldCurrent = current.value;
+        current.value = 0;
+
+        if (oldCurrent <= 1)
+            emit("previous");
+        else
+            emit("rewind");
+    }
+
+    function togglePause() {
+        paused.value = !paused.value;
+
+        if (paused.value)
+            emit("pause");
+        else
+            emit("play");
+    }
 
     function handleKey(e: KeyboardEvent) {
         switch (e.key) {
@@ -62,12 +75,19 @@
             case "Spacebar":
                 e.preventDefault();
                 togglePause();
+                
                 break;
+
             case "ArrowRight":
                 current.value = Math.min(current.value + 5, props.length);
+                emit("seek", current.value);
+                
                 break;
+
             case "ArrowLeft":
                 current.value = Math.max(current.value - 5, 0);
+                emit("seek", current.value);
+                
                 break;
         }
     }
@@ -101,7 +121,7 @@
                 {{ convertFormatTime(current) }}
             </span>
 
-        <div class="w-full mr-3" ref="progressBarRef">
+        <div class="w-full mr-6" ref="progressBar">
             <ProgressBar :percentage="percentage" @seek="handleSeek" />
         </div>
 
