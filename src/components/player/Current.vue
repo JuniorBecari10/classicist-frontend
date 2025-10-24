@@ -15,7 +15,7 @@
 
 <template>
     <div class="w-1/4 h-full flex items-center ml-5">
-        <img src="https://github.com/JuniorBecari10/classicist-public/blob/main/files/images/covers/symp5.jpg?raw=true"
+        <img :src="`http://localhost:8080/public/images/covers/${props.imageName}`"
             class="size-15 mr-5 rounded-lg">
 
         <div class="flex flex-col justify-center items-start w-full truncate">
