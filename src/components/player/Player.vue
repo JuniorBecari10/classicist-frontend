@@ -53,6 +53,9 @@
         if (audio.value)
             audio.value.volume = percent;
     }
+
+
+    document.title = `${formatDisplayWork(displayWork.value)} ― Classicist`;
 </script>
 
 <template>
