@@ -1,6 +1,6 @@
 <script setup lang="ts">
-    import { ref, onMounted, onUnmounted } from "vue";
-    import ProgressBar from "./ProgressBar.vue";
+    import { ref, onMounted, onUnmounted, defineEmits } from "vue";
+    import ProgressBar from "../util/ProgressBar.vue";
     import Tooltip from "../util/Tooltip.vue";
 
     const volume = ref(100);
@@ -8,8 +8,13 @@
 
     const progressBarRef = ref<HTMLElement | null>(null);
 
+    const emit = defineEmits<{
+        (e: "volume", percent: number): void;
+    }>()
+
     function handleVolume(percent: number) {
         volume.value = percent;
+        emit("volume", percent / 100);
     }
 
     function handleMouseDown(e: MouseEvent) {
@@ -34,15 +39,15 @@
 </script>
 
 <template>
-    <div class="w-1/4 h-full flex justify-center items-center p-4 pl-6">
+    <div class="w-[20%] h-full flex justify-center items-center p-4 ml-15">
         <div class="w-1/2 flex justify-end items-center mr-1">
-            <button class="mr-3">
+            <button class="mr-3 flex-shrink-0">
                 <img src="@/assets/images/lyrics.png">
             </button>
-            <button class="mr-3">
+            <button class="mr-3 flex-shrink-0">
                 <img src="@/assets/images/sheet.png">
             </button>
-            <button>
+            <button class="flex-shrink-0">
                 <img src="@/assets/images/volume.png">
             </button>
         </div>
