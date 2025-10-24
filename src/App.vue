@@ -25,20 +25,60 @@
       <div class="flex-1"></div>
 
       <div class="flex items-center justify-center cursor-pointer">
-        <img class="mr-2 w-[25px]" src="./assets/config.png" />
         <div class="bg-[#85E014] size-10 text-lg rounded-full text-white font-bold flex items-center justify-center">A</div>
       </div>
     </header>
 
       <div class="box-border flex-1  flex">
 
-        <div class="flex-1 bg-red-500 h-full m-2 rounded-md mt-0 ">
-          <button class=" size-8 box-content md:box-border rounded-md bg-[#3c3c3c] cursor-pointer"><img class="mr-3 w-4 flex itens-center justify-center" src="./assets/home.png"></button>
-          
+        <div class="flex-1 items-center justify-center bg-red-500 h-full m-2 rounded-xl mt-0">
+            <div class=" flex p-2">
+                <button class="m-2 size-10 box-content md:box-border rounded-md bg-[#3c3c3c] cursor-pointer"><img class="mr-3 w-4 ml-3 flex items-center justify-center" src="./assets/home.png"></button>
+                <button class="flex-1 h-10 mt-2 mr-2 items-center justify-center flex bg-[#3c3c3c] rounded-md cursor-pointer"><img class="mr-3 size-5" src="./assets/search.png" /><span class="whitespace-nowrap">Search your library</span></button>
+                
+            </div>
+            <div class=" ml-4 flex-1 items-center justify-center">
+                <button class="flex-1 px-5 h-8 bg-[#3c3c3c] rounded-md cursor-pointer">Works</button>
+                <button class="ml-2 flex-1 px-5 h-8 bg-[#3c3c3c] rounded-md cursor-pointer">Composers</button>
+                <button class="ml-2 flex-1 px-5 h-8 bg-[#3c3c3c] rounded-md cursor-pointer">Performer</button>
+            </div>
+            <div class="mt-10 flex-1 items-center justify-center">
+                <button class="flex-1 px-5 h-8 rounded-md cursor-pointer">
+                    <p class="font-bold font-fredoka ">Symphony No. 7</p>
+                    <p class="text-[11px] text-[fgray] font-fredoka ">Ludwig van Beethoven</p>
+                </button>
+            </div>
         </div>
 
-        <div class="flex-3 bg-blue-500 h-full m-2 rounded-md mt-0"></div>
-      </div>
+        <div class="flex-3 bg-blue-500 h-full m-2 rounded-xl mt-0">
+          <div>
+              <h1 class="m-6 ml-8 text-[32px] font-bold font-fredoka">Welcome back, Antônio!</h1>
+              <p class="ml-8 mt-25 text-[15px] font-fredoka text-[fgray]">Recommended for you</p>
+          </div>
+
+          <div>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img1.png"></button>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img2.png"></button>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img3.png"></button>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img1.png"></button>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img2.png"></button>
+              <button class="cursor-pointer"><img class="ml-8 mt-2 rounded-md size-45" src="./assets/img3.png"></button>
+          </div>
+
+
+          <div>
+            <p class="ml-8 mt-10 text-[15px] font-fredoka text-[fgray]">We think you might like these...</p>
+            <button class="flex-1 items-center justify-center ml-8 mt-4 bg-[#3c3c3c] rounded-md"><img class="ml-6 mt-2 rounded-md size-10" src="./assets/img1.png">
+                <p class="flex-1 font-bold font-fredoka">Symphony No. 5 in C Minor</p>
+                <p class="flex-1">Ludwig van Beethoven | Herbert von Karajan - Berliner Philarmon</p>
+            </button>
+            <button></button>
+            <button></button>
+            <button></button>
+          </div>
+
+        </div>
+        </div>
       
       <div class="h-10  bg-green-500 m-2 rounded-md  "></div>
 
