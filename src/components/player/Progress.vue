@@ -103,7 +103,7 @@
         <div class="w-full h-1/2 flex justify-center">
             <div class="flex w-1/5 h-full justify-evenly items-center">
                 <Button :action="rewind">
-                    <img class="relative left-0.5" src="@/assets/images/back.png" />
+                    <img src="@/assets/images/back.png" />
                 </Button>
 
                 <Button :action="togglePause">
@@ -112,7 +112,7 @@
                 </Button>
 
                 <Button :action="forward">
-                    <img class="relative right-0.5" src="@/assets/images/forward.png" />
+                    <img src="@/assets/images/forward.png" />
                 </Button>
             </div>
         </div>

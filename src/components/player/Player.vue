@@ -1,9 +1,11 @@
 <script setup lang="ts">
     import { ref } from "vue";
+    import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
+    import { BACKEND_URL } from "@/util/consts.ts";
+    
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
-    import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
 
     const workTitle = ref({
         kind: "Symphony",
@@ -60,7 +62,7 @@
 </script>
 
 <template>
-    <audio ref="audio" src="http://localhost:8080/public/audio/symp5-1.mp3"></audio>
+    <audio ref="audio" :src="`${BACKEND_URL}/public/audio/symp5-1.mp3`"></audio>
 
     <div class="w-full p-5">
         <div class="w-full h-22 bg-fg rounded-lg flex items-center">

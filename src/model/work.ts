@@ -72,7 +72,7 @@ interface CompositionYear {
     end_year: Option<number>;
 }
 
-interface Work {
+export interface Work {
     id: number;
     title: WorkTitle;
     key: Key;
