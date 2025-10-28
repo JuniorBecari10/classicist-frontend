@@ -9,7 +9,6 @@
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
-    import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
 
     const store = usePlayerStore();
 
