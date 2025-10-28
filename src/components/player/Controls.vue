@@ -86,7 +86,7 @@
             <ProgressBar :percentage="volume" @seek="handleVolume" :disabled="muted" />
         </div>
 
-        <div v-show="dragging">
+        <div class="transition-[opacity] duration-100 ease-in" :style="{ opacity: dragging ? 1 : 0}">
             <Tooltip>{{ `${Math.round(volume)}%` }}</Tooltip>
         </div>
     </div>
