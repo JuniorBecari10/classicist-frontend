@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
     import { computed, ref } from "vue";
+    import { BACKEND_URL } from "@/util/consts.ts";
 
     import ImageFullScreen from "../util/ImageFullScreen.vue";
 
@@ -15,7 +16,7 @@
 
     const name = computed(() => formatDisplayWork(props.work));
     const authors = computed(() => formatDisplayAuthors(props.composer, props.performers));
-    const imagePath = computed(() => `http://localhost:8080/public/images/covers/${props.imageName}`);
+    const imagePath = computed(() => `${BACKEND_URL}/public/images/covers/${props.imageName}`);
 
     const disappear = () => showImage.value = false;
 </script>
@@ -25,7 +26,7 @@
         <img
             :src="imagePath"
             @click="showImage = true"
-            class="size-15 mr-5 rounded-lg cursor-pointer">
+            class="size-15 mr-5 rounded-lg cursor-pointer hover:scale-105 transition-[scale] duration-200">
 
         <div class="flex flex-col justify-center items-start w-full truncate">
             <span class="font-fredoka font-semibold text-lg" :title="name">{{ name }}</span>
