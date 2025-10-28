@@ -21,3 +21,10 @@ body {
   --font-oldstd: "Old Standard TT", serif;
   --font-cmth: "Cambria Math";
 }
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
