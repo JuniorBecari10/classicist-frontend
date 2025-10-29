@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
-    import { computed } from "vue";
+    import { computed, ref } from "vue";
+
+    import ImageFullScreen from "../util/ImageFullScreen.vue";
 
     const props = defineProps<{
         work: DisplayWork;
@@ -9,14 +11,21 @@
         imageName: string;
     }>();
 
+    const showImage = ref(false);
+
     const name = computed(() => formatDisplayWork(props.work));
     const authors = computed(() => formatDisplayAuthors(props.composer, props.performers));
+    const imagePath = computed(() => `http://localhost:8080/public/images/covers/${props.imageName}`);
+
+    const disappear = () => showImage.value = false;
 </script>
 
 <template>
     <div class="w-1/4 h-full flex items-center ml-5">
-        <img :src="`http://localhost:8080/public/images/covers/${props.imageName}`"
-            class="size-15 mr-5 rounded-lg">
+        <img
+            :src="imagePath"
+            @click="showImage = true"
+            class="size-15 mr-5 rounded-lg cursor-pointer">
 
         <div class="flex flex-col justify-center items-start w-full truncate">
             <span class="font-fredoka font-semibold text-lg" :title="name">{{ name }}</span>
@@ -26,4 +35,6 @@
         <div class="relative right-7 size-12 bg-linear-to-r from-transparent to-fg"></div>
         <div class="relative right-7 bg-fg size-12"></div>
     </div>
+
+    <ImageFullScreen v-show="showImage" :imageName="props.imageName" @disappear="disappear" />
 </template>
