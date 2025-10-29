@@ -83,4 +83,5 @@
       <div class="h-10  bg-green-500 m-2 rounded-md  "></div>
 
   </div>
+    <Player />
 </template>
