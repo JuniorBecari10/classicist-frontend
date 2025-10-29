@@ -3,7 +3,7 @@
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
-    import { formatDisplayWork } from "@/util/format.ts";
+    import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
 
     const workTitle = ref({
         kind: "Symphony",
@@ -23,16 +23,18 @@
         },
     ]);
 
+    const composer = { name: 'Ludwig van Beethoven' };
+
     const audio = ref<HTMLAudioElement | null>(null);
 
     function handlePlay() {
         audio.value?.play();
-        document.title = `Playing ${formatDisplayWork(displayWork.value)} ― Classicist`;
+        document.title = `▶ ${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
     }
 
     function handlePause() {
         audio.value?.pause();
-        document.title = `${formatDisplayWork(displayWork.value)} ― Classicist`;
+        document.title = `${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
     }
 
     function handleSeek(progress: number) {
@@ -54,8 +56,7 @@
             audio.value.volume = percent;
     }
 
-
-    document.title = `${formatDisplayWork(displayWork.value)} ― Classicist`;
+    document.title = `${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
 </script>
 
 <template>
@@ -65,7 +66,7 @@
         <div class="w-full h-22 bg-fg rounded-lg flex items-center">
             <Current
                 :work="displayWork"
-                :composer="{ name: 'Ludwig van Beethoven' }"
+                :composer="composer"
                 :performers="performers"
                  imageName="symp5.jpg"
             />
