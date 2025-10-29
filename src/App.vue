@@ -1,11 +1,6 @@
 <script setup lang="ts">
-  import Player from "./Player.vue"
-
 </script>
 <template>
-
-  
- <Player></Player>
-  <h1>Teste</h1>
+  <img src="src/assets/landing-page-gif.gif" class="h-50 w-full">
   
 </template>
