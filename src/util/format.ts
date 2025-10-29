@@ -1,15 +1,9 @@
-import type { Composer, DisplayWork, WorkTitle } from "@/model/work.ts";
+import type { Composer, DisplayWork, WorkTitle, TempoMarking } from "@/model/work.ts";
 import type { Performer } from "@/model/recording.ts";
 import { convertDuration, type Time } from "./time.ts";
 
-function formatTitleDisplay(title: WorkTitle): string {
-    return `${title.kind} No. ${title.number}${
-        title.nickname ? `: "${title.nickname}"` : ""
-    }`;
-}
-
 export function formatDisplayWork(dw: DisplayWork): string {
-    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${dw.movement}`
+    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${joinTempoMarkings(dw.tempos)}`
 }
 
 export function formatDisplayAuthors(composer: Composer, performers: Performer[]): string {
@@ -30,7 +24,23 @@ export function convertFormatTime(duration: number): string {
     return formatTime(convertDuration(duration));
 }
 
-export function toRoman(num: number): string {
+function formatTitleDisplay(title: WorkTitle): string {
+    return `${title.kind} No. ${title.number}${
+        title.nickname ? `: "${title.nickname}"` : ""
+    }`;
+}
+
+function joinTempoMarkings(tempos: TempoMarking[]): string {
+    return tempos
+        .map(formatTempoMarking)
+        .join(" - ");
+}
+
+function formatTempoMarking(tempo: TempoMarking): string {
+    return `${tempo.form ? `${tempo.form}: ` : ""}${tempo.name}`;
+}
+
+function toRoman(num: number): string {
     if (num <= 0 || num >= 4000) {
         throw new Error("Number must be between 1 and 3999");
     }
