@@ -15,7 +15,7 @@
 
     const displayWork = ref({
         title: workTitle.value,
-        movement: "Allegro con brio",
+        tempos: [{form: null, name: "Allegro con brio"}],
         movementNumber: 1,
     } satisfies DisplayWork);
 
