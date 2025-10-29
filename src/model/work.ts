@@ -50,7 +50,7 @@ interface Catalog {
     subnumber: Option<string>;
 }
 
-interface TempoMarking {
+export interface TempoMarking {
     form: Option<string>;
     name: string;
 }
@@ -86,6 +86,6 @@ export interface Work {
 
 export interface DisplayWork {
     title: WorkTitle;
-    movement: string;
+    tempos: TempoMarking[];
     movementNumber: number;
 }
