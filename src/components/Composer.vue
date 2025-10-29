@@ -14,6 +14,7 @@ import About from './About.vue'
             </div>
         </div>
 
+        <!-- Body -->
         <p class="pl-9 mt-3 font-light text-xl">Works</p>
         <section class="grid justify-center my-3 w-full gap-8">
             <Works />

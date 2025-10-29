@@ -74,7 +74,8 @@
                 </div>
                 <span class="font-light text-[115%]">Symphony No. 9 • “Choral”</span>
                 <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Op. 125</div>
-                <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Herbert von Karajan • Berliner Philarmoniker ― 1984</div>
+                <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Herbert von Karajan • Berliner
+                    Philarmoniker ― 1984</div>
             </section>
             <span class="font-mono">01:06:25</span>
         </div>
