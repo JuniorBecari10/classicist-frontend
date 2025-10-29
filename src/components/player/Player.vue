@@ -64,7 +64,7 @@
 <template>
     <audio ref="audio" :src="`${BACKEND_URL}/public/audio/symp5-1.mp3`"></audio>
 
-    <div class="w-full p-5">
+    <div class="w-full p-2">
         <div class="w-full h-22 bg-fg rounded-lg flex items-center">
             <Current
                 :work="displayWork"

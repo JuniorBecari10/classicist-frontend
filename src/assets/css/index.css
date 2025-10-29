@@ -12,8 +12,8 @@
     -ms-user-select: none;
 }
 
-body {
-    @apply bg-black text-white;
+html, body {
+    @apply h-full bg-black text-white;
 }
 
 @theme {
@@ -22,6 +22,7 @@ body {
 
     --color-fg: #252525;
     --color-fg-lighter: #3C3C3C;
+    --color-fg-more-lighter: #4F4F4F;
 
     --color-fgray: #B8B8B8;
 }
