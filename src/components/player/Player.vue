@@ -9,9 +9,11 @@
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
-    import { formatDisplayWork } from "@/util/format.ts";
+    import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
 
     const store = usePlayerStore();
+
+    const composer = { name: 'Ludwig van Beethoven' };
 
     const audio = ref<HTMLAudioElement | null>(null);
     const isPlaying = ref(false);
