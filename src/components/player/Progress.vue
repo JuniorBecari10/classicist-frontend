@@ -75,24 +75,32 @@
     }
 
     function handleKey(e: KeyboardEvent) {
+        // Prevent triggering if a text field or textarea is focused
+        const active = document.activeElement;
+        if (
+            active &&
+            (active.tagName === "INPUT" ||
+             active.tagName === "TEXTAREA" ||
+             (active as HTMLElement).isContentEditable)
+        ) {
+            return;
+        }
+
         switch (e.key) {
             case " ":
             case "Spacebar":
                 e.preventDefault();
                 togglePause();
-                
                 break;
 
             case "ArrowRight":
                 current.value = Math.min(current.value + 5, props.length);
                 emit("seek", current.value);
-                
                 break;
 
             case "ArrowLeft":
                 current.value = Math.max(current.value - 5, 0);
                 emit("seek", current.value);
-                
                 break;
         }
     }

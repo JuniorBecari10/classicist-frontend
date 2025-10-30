@@ -23,6 +23,7 @@ html, body {
     --color-fg: #252525;
     --color-fg-lighter: #3C3C3C;
     --color-fg-more-lighter: #4F4F4F;
+    --color-fg-even-more-lighter: #606060;
 
     --color-fgray: #B8B8B8;
 }
