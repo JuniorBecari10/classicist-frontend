@@ -1,12 +1,20 @@
+<script setup lang="ts">
+    import { ref } from "vue";
+    import SearchBar from "../util/SearchBar.vue";
+
+    const search = ref("");
+</script>
+
 <template>
     <header class="flex items-center justify-center m-4 h-10">
-        <img class="cursor-pointer" src="@/assets/images/logo.png" />
-
+        <a href="/">
+            <img src="@/assets/images/logo.png" />
+        </a>
+        
         <div class="flex-1"></div>
 
-        <div class="hover:brightness-120 flex items-center px-25 py-2 justify-center bg-fg-lighter rounded-md cursor-pointer">
-            <img class="mr-3 w-4" src="@/assets/images/search.png" />
-            <span class="text-white font-fredoka">Search</span>
+        <div class="w-80 h-10 flex">
+            <SearchBar v-model="search">Search</SearchBar>
         </div>
 
         <div class="flex-1"></div>

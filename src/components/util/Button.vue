@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <button
-        class="flex items-center justify-center flex-shrink-0 rounded-md transition duration-200 filter hover:brightness-120"
+        class="flex items-center justify-center flex-shrink-0 rounded-md transition duration-200 filter hover:bg-fg-lighter"
         :style="{
             padding: props.noPadding ? 0 : 'calc(0.25rem * 1.5)',
             lineHeight: 0,
