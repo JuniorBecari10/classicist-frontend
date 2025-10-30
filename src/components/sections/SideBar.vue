@@ -4,6 +4,7 @@
     import ButtonBg from "../util/ButtonBg.vue";
     import ButtonFilter from "../util/ButtonFilter.vue";
     import SearchBar from "../util/SearchBar.vue";
+    import SidebarWork from "../util/SidebarWork.vue";
 
     const search = ref("");
 
@@ -25,11 +26,8 @@
             <ButtonFilter v-model="filterPerformers" :noMr="true">Performers</ButtonFilter>
         </div>
 
-        <div class="m-4 p-2 rounded-md hover:bg-fg-lighter mt-10 flex-1 w-full">
-            <button class="flex-1 px-5 h-8 rounded-md cursor-pointer text-left">
-                <p class="font-semibold font-fredoka">Symphony No. 7</p>
-                <p class="text-[11px] text-fgray font-fredoka">Ludwig van Beethoven</p>
-            </button>
+        <div class="w-full">
+            <SidebarWork name="Symphony No. 7" composer="Ludwig van Beethoven" />
         </div>
     </div>
 </template>
