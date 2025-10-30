@@ -17,7 +17,7 @@ function handleClick() {
 
 <template>
     <button
-        :class="`${buttonClass} px-5 h-9 flex items-center justify-center rounded-md transition-all duration-200 flex-shrink-0`"
+        :class="`${buttonClass} px-5 h-9 flex items-center justify-center rounded-md transition-all duration-200 flex-shrink-0 cursor-pointer`"
         :style="{ marginRight: props.noMr ? 0 : 'calc(0.125rem * 4)' }"
         @click="handleClick" v-ripple>
         <slot />

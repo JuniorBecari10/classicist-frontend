@@ -9,8 +9,8 @@
     <div class="bg-black flex flex-col w-full min-h-screen">
         <Header />
 
-        <div class="p-2 flex-1">
-            <div class="flex">
+        <div class="p-2 flex-1 flex flex-col">
+            <div class="flex flex-1">
                 <Sidebar />
                 <Center />
             </div>
