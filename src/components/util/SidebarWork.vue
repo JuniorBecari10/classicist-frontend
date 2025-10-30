@@ -1,15 +1,18 @@
 <script setup lang="ts">
+    import type { WorkTitle } from "@/model/work.ts";
+    import { formatTitleDisplay } from "@/util/format.ts";
+    
     const props = defineProps<{
-        name: string;
+        work: WorkTitle;
         composer: string;
     }>();
 </script>
 
 <template>
-    <div class="p-2 rounded-md hover:bg-fg-lighter flex-1 w-[96%] m-2">
-        <button class="flex-1 h-8 rounded-md cursor-pointer text-left" v-ripple>
-            <p class="font-semibold font-fredoka">{{ props.name }}</p>
-            <p class="text-[11px] text-fgray font-fredoka">{{ props.composer }}</p>
-        </button>
-    </div>
+    <button class="
+            hover:bg-fg-more-lighter transition-[background] duration-200 flex-1 h-15 rounded-md cursor-pointer text-left w-[96%] p-3 m-2
+            flex flex-col justify-center items-start" v-ripple>
+        <p class="text-[1.15rem] font-semibold font-fredoka">{{ formatTitleDisplay(props.work) }}</p>
+        <p class="text-sm text-fgray font-fredoka">{{ props.composer }}</p>
+    </button>
 </template>
