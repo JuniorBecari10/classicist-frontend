@@ -9,7 +9,7 @@
             <line x1="16.5" y1="7" x2="16.5" y2="42" stroke="white"/>
         </svg>
 
-        <div class="bg-[#252525] rounded-[34px] px-20 py-10 gap-10 grid cols-1 justify-center items-center justify-items-center relative top-28" @click.self="reqmnts[1] = 1">
+        <div class="bg-[#252525] rounded-[34px] px-20 py-10 gap-10 grid cols-1 justify-center items-center justify-items-center relative top-28">
 
             <div class="bg-[#333] rounded-[16px] flex gap-12 px-15 py-4 items-center relative">
                 <span class="bg-white rounded-[7px] absolute w-28 h-10 z-0 left-[10%] transition transform delay-0.4" :class="{'translate-x-30': option}"></span>
@@ -17,46 +17,55 @@
                 <button class="pl-1 z-10" :disabled="option" @click="chgopt" :class="{sel: option}">Sign Up</button>              
             </div>
 
-            <form class="bg-[#252525] grid cols-1 gap-5 justify-items-center">
-
-                <section v-if="option" class="grid gap-6 justify-items-center text-[#a3a3a3]">
-                    <input type="text" placeholder="Username" v-model="creds[0]" @click="reqmnts[0] = 1"
-                    minlength="3" maxlength="16" pattern="[a-zA-Z0-9]+">
-
-                    <!-- <span v-show="required[0] && required[1]">escreve garai</span> -->
+            <form class="bg-[#252525] grid cols-1 gap-8 justify-items-center" @submit.prevent="loghdl">
+                <section class="grid gap-6 justify-items-center text-[#a3a3a3]">
+                    <input type="text" placeholder="Username" v-model="creds[0]" 
+                    :minlength="option ? '3' : ''" 
+                    :maxlength="option ? '16' : ''"
+                    pattern="[a-zA-Z0-9]+">
 
                     <input type="password" placeholder="Password" v-model="creds[1]" 
-                    minlength="8" maxlength="16" pattern="[a-zA-Z0-9]+">
+                    :minlength="option ? '8' : ''" 
+                    :maxlength="option ? '16' : ''"
+                    pattern="[a-zA-Z0-9]+">
 
-                    <input type="password" placeholder="Confirm Password" v-model="creds[2]">
+                    <section class="overflow-hidden transition-all transition-discrete delay-0 duration-1000 ease-linear" 
+                    :class="option ? 'max-h-[500px]' : 'max-h-0'"> <!-- Arrumar espaçamento extra -->
+                        <input type="password" placeholder="Confirm Password" v-model="creds[2]">
+                    </section>
+
+                    <span class="w-full hidden -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[90%]" ref="errtxt"
+                    v-if="!option && 1" >Usuário ou senha incorretos.</span>
                 </section>
 
-                <section v-else class="grid gap-6 justify-items-center text-[#a3a3a3]">
-                    <input type="text" placeholder="Username" v-model="creds[0]">
-                    <input type="password" placeholder="Password" v-model="creds[1]">
-                </section>
-
-                <input type="submit" :value="option ? 'Sign Up' : 'Login'" class="bg-white rounded-[7px] text-black px-10 py-3 justify-center" @click="loghdl">
+                <input type="submit" :value="option ? 'Sign Up' : 'Login'" class="bg-white rounded-[7px] text-black px-10 py-3 justify-center transition width delay-0.4" :disabled="dis">
             </form>
         </div>
     </section>
 </template>
 
 <script setup lang = "ts">
-    import { computed, ref } from 'vue';
+    import { onUpdated, ref } from 'vue';
 
-    const option = ref(1)
-    const chgopt =()=> option.value ^= 1
+    const option = ref(false)
+    const chgopt =()=> option.value = !option.value
     const creds = ref(['', '', ''])
-    const reqmnts = ref([0, 0, 0])
+    const dis = ref(true)
+    const errtxt = ref(null)
 
     const loghdl =()=> {
-        if (option) {
-            // Enviar para main page com username criado
-        } else if (creds.value[0] === 'user' && creds.value[1] === '123abc@') {
+        if (creds.value[0] === 'user' && creds.value[1] === '123abc@') {
             // Enviar para main page
+        } else {
+            errtxt.value.style.display = 'block'
         }
     }
+
+    onUpdated(() => {
+            let chk = (creds.value[0].length && creds.value[1].length)
+            if (option.value) chk &= creds.value[2].length
+            dis.value = (chk ? false : true)
+    })
 </script>
 
 <style>
@@ -67,12 +76,16 @@
         padding-block: 13px;
         width: 550px;
     }
-    .scl {scale: 90%;}
+    .scl {scale: 90%}
     .sel {
         color: black;
         transition: color 0.4s;
     }
     button:hover, input[type="submit"]:hover {cursor: pointer}
     button:disabled {cursor: default}
-    
+    input[type="submit"]:disabled {
+        cursor: not-allowed;
+        background: #333;
+        color: #808080
+    }
 </style>
