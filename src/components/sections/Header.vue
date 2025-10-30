@@ -7,7 +7,7 @@
 
 <template>
     <header class="flex items-center justify-center m-4 h-10">
-        <a href="/">
+        <a href="/" v-ripple>
             <img src="@/assets/images/logo.png" />
         </a>
         
