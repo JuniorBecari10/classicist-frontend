@@ -94,7 +94,6 @@
             case "Spacebar":
                 e.preventDefault();
                 togglePause();
-                
                 break;
 
             case "ArrowRight":
