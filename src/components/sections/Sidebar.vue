@@ -11,23 +11,29 @@
     const filterWorks = ref(false);
     const filterComposers = ref(false);
     const filterPerformers = ref(false);
+
+    const workTitle = ref({
+        kind: "Symphony",
+        number: 5,
+        nickname: "Fate",
+    } satisfies WorkTitle);
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-center bg-fg h-full rounded-xl">
+    <div class="flex flex-col items-center justify-start bg-fg rounded-xl">
         <div class="flex p-2 w-full">
             <ButtonBg> <img class="w-4" src="@/assets/images/home.png" /> </ButtonBg>
             <SearchBar v-model="search">Search your library</SearchBar>
         </div>
 
-        <div class="flex items-center justify-center w-full py-1 px-3">
+        <div class="grid grid-rows-1 grid-cols-3 w-full py-1 px-2">
             <ButtonFilter v-model="filterWorks">Works</ButtonFilter>
             <ButtonFilter v-model="filterComposers">Composers</ButtonFilter>
             <ButtonFilter v-model="filterPerformers" :noMr="true">Performers</ButtonFilter>
         </div>
 
         <div class="w-full">
-            <SidebarWork name="Symphony No. 7" composer="Ludwig van Beethoven" />
+            <SidebarWork :work="workTitle" composer="Ludwig van Beethoven" />
         </div>
     </div>
 </template>

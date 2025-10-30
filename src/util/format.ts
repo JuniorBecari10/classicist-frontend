@@ -24,11 +24,13 @@ export function convertFormatTime(duration: number): string {
     return formatTime(convertDuration(duration));
 }
 
-function formatTitleDisplay(title: WorkTitle): string {
+export function formatTitleDisplay(title: WorkTitle): string {
     return `${title.kind} No. ${title.number}${
         title.nickname ? `: "${title.nickname}"` : ""
     }`;
 }
+
+// ---
 
 function joinTempoMarkings(tempos: TempoMarking[]): string {
     return tempos

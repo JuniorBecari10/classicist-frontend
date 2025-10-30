@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import Header from "./components/sections/Header.vue";
-    import SideBar from "./components/sections/SideBar.vue";
+    import Sidebar from "./components/sections/Sidebar.vue";
     import Center from "./components/sections/Center.vue";
     import Player from "./components/player/Player.vue";
 </script>
@@ -11,7 +11,7 @@
 
         <div class="p-2 flex-1">
             <div class="flex">
-                <SideBar />
+                <Sidebar />
                 <Center />
             </div>
 
