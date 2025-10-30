@@ -21,7 +21,7 @@ interface RecordedMovement {
   audioFile: AudioFile;
 }
 
-interface Recording {
+export interface Recording {
   id: number;
   workId: number;
   year: number;
