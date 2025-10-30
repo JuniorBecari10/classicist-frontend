@@ -19,9 +19,7 @@ function handleClick() {
     <button
         :class="`${buttonClass} px-5 h-9 flex items-center justify-center rounded-md transition-all duration-200 flex-shrink-0`"
         :style="{ marginRight: props.noMr ? 0 : 'calc(0.125rem * 4)' }"
-        @click="handleClick"
-        v-ripple
-    >
+        @click="handleClick" v-ripple>
         <slot />
     </button>
 </template>
