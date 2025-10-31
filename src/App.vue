@@ -3,6 +3,7 @@
     import Sidebar from "./components/sections/Sidebar.vue";
     import Center from "./components/sections/Center.vue";
     import Player from "./components/player/Player.vue";
+    import ResizeSplit from "./components/util/ResizeSplit.vue";
 </script>
 
 <template>
@@ -10,10 +11,10 @@
         <Header />
 
         <div class="p-2 flex-1 flex flex-col">
-            <div class="flex flex-1">
-                <Sidebar />
-                <Center />
-            </div>
+            <ResizeSplit>
+                <template #left> <Sidebar /> </template>
+                <template #right> <Center /> </template>
+            </ResizeSplit>
 
             <Player />
         </div>
