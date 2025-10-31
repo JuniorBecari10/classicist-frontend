@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import ImageWork from "../util/ImageWork.vue";
+    import WorkTile from "../util/WorkTile.vue";
 
     function getUniqueRandomNumbers(a: number, b: number, n: number): number[] {
         if (b < a)
@@ -22,27 +23,25 @@
         return numbers;
     }
 
-    const ids = getUniqueRandomNumbers(1, 20, 10);
+    const minId = 1;
+    const maxId = 20;
+
+    const ids = getUniqueRandomNumbers(minId, maxId, 10);
+    const tileIds = getUniqueRandomNumbers(minId, maxId, 4);
 </script>
 
 <template>
-    <div class="flex-1 bg-fg ml-2 rounded-xl">
-        <h1 class="mt-6 ml-8 text-[32px] font-bold">Welcome back, Antônio!</h1>
+    <div class="flex-1 bg-fg rounded-xl overflow-y-auto">
+        <h1 class="mt-6 ml-6 text-[32px] font-bold">Welcome back, Antônio!</h1>
 
-        <p class="ml-8 mt-6 text-[15px]">Recommended for you</p>
+        <p class="ml-6 mt-6 text-[15px]">Recommended for you</p>
         <div class="flex ml-4 mt-4 gap-2 overflow-auto">
             <ImageWork :workId="id" v-for="id in ids" />
         </div>
 
-        <p class="ml-8 mt-10 text-[15px]">We think you might like these...</p>
+        <p class="ml-6 mt-10 text-[15px]">We think you might like these...</p>
         <div class="grid grid-cols-2 gap-2 mx-4 mt-4">
-            <button class="hover:brightness-120 flex items-center justify-center p-3 bg-fg-lighter rounded-md">
-                <img class="rounded-md size-10" src="./assets/img1.png" />
-                <div class="flex-1 ml-2">
-                    <p class="text-[15px] font-semibold font-fredoka">Symphony No. 5 in C Minor</p>
-                    <p class="text-[11px]">Ludwig van Beethoven | Herbert von Karajan - Berliner Philharmon</p>
-                </div>
-            </button>
+            <WorkTile :workId="id" v-for="id in tileIds" />
         </div>
     </div>
 </template>
