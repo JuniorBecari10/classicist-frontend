@@ -50,7 +50,7 @@ onUnmounted(() => {
 <template>
     <div
         ref="container"
-        class="fixed pointer-events-none z-50 p-2 bg-fg-lighter rounded-md"
+        class="fixed pointer-events-none z-50 p-2 bg-fg-lighter rounded-md !font-jetbrains text-sm"
         :style="{
             left: `${mouseX}px`,
             top: `${mouseY}px`,

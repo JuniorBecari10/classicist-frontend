@@ -126,7 +126,7 @@
         </div>
 
         <div class="w-full h-1/3 flex items-center">
-            <span class="text-fgray font-jetbrains text-sm">
+            <span class="text-fgray !font-jetbrains text-sm">
                 {{ convertFormatTime(current) }}
             </span>
 
@@ -134,7 +134,7 @@
                 <ProgressBar :percentage="percentage" @seek="handleSeek" />
             </div>
 
-            <span class="text-fgray font-jetbrains text-sm">
+            <span class="text-fgray !font-jetbrains text-sm">
                 {{ convertFormatTime(props.length) }}
             </span>
         </div>
