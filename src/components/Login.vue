@@ -17,32 +17,72 @@
                 <button class="pl-1 z-10" :disabled="option" @click="chgopt" :class="{sel: option}">Sign Up</button>              
             </div>
 
-            <form class="bg-[#252525] grid cols-1 gap-8 justify-items-center" @submit.prevent="loghdl">
+            <form class="bg-[#252525] grid cols-1 gap-8 justify-items-center" @submit.prevent="loghdl" novalidate>
                 <section class="grid gap-6 justify-items-center text-[#a3a3a3]">
-                    <input type="text" placeholder="Username" v-model="creds[0]" @input="chkcreds($event, 'username')"
-                    :minlength="option ? '4' : ''" 
-                    :maxlength="option ? '16' : ''"
-                    :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
-                    <svg class="absolute top-40 right-10" fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve">
-                        <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z" fill="white"/>
-                        <rect fill="none" width="10" height="10"/>
-                    </svg>
-                    <span class="w-full  -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[90%]" v-if="errmsgs[1]">
+                    
+                    <div class="flex items-center">
+                        <input type="text" placeholder="Username" v-model="creds[0]" @input="chkcreds($event, 0)" 
+                            :minlength="option ? '4' : ''"
+                            :maxlength="option ? '16' : ''" 
+                            :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
+
+                        <svg class="absolute right-10" v-if="errmsgs[1] === false" version="1.1" id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
+                            <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
+                                fill="white" />
+                            <rect fill="none" />
+                        </svg>
+                    </div>
+
+                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[1]">
                         Username must have more than 3 characters.
                     </span>
 
-                    <input type="password" placeholder="Password" v-model="creds[1]" 
-                    :minlength="option ? '8' : ''" 
-                    :maxlength="option ? '16' : ''"
-                    :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
+                    <div class="flex items-center">
+                        <input type="text" placeholder="Password" v-model="creds[1]" @input="chkcreds($event, 1)"
+                            @keydown="blocksp"
+                            :minlength="option ? '8' : ''" 
+                            :maxlength="option ? '16' : ''"
+                            :pattern="option ? '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).+$' : '.*'">
+
+                        <svg class="absolute right-10" v-if="errmsgs[2] === false" version="1.1" id="Layer_1"
+                            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
+                            <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
+                                fill="white" />
+                            <rect fill="none" />
+                        </svg>
+                    </div>
+
+                    <div class="bg-gray-700 rounded-[12px] w-full h-1.5">
+                        <div class="bg-white h-full w-0 transition-all duration-300" :class="`w-[${strbar()}%]`"></div>
+                    </div>
+                    
+                    <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="errmsgs[2]">
+                        Password must have at least have 8 characters including lower and uppercase, numbers and special ones.
+                    </span>
 
                     <section class="overflow-hidden transition-all transition-discrete delay-0 duration-1000 ease-linear" 
                     :class="option ? 'max-h-[500px]' : 'max-h-0'"> <!-- Arrumar espaçamento extra -->
-                        <input type="password" placeholder="Confirm Password" v-model="creds[2]">
+                        <div class="flex items-center">                            
+                            <input type="password" placeholder="Confirm Password" v-model="creds[2]" @input="chkcreds(null, null)">
+                            <svg class="absolute right-10" v-if="errmsgs[3] === false" version="1.1" id="Layer_1"
+                                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
+                                <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
+                                    fill="white" />
+                                <rect fill="none" />
+                            </svg>
+                        </div>
                     </section>
 
-                    <span class="w-full -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[90%]" v-if="errmsgs[0]">
-                        Username or password incorrect.
+                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[3]">
+                        Passwords don't match.
+                    </span>
+
+                    <span class="w-full -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[0]">
+                        Incorrect username or password.
                     </span>
                 </section>
 
@@ -56,12 +96,17 @@
     import { onUpdated, ref } from 'vue';
 
     const option = ref(true)
-    const creds = ref(['', '', ''])
+    const creds = ref(['', '', '']) /* username, password, confirm password */
     const dis = ref(true)
-    const errmsgs: any = ref([false, false, false, false])
+    const errmsgs: any = ref([undefined, undefined, undefined, undefined]) /* login failed, user reqs, pwrd reqs, pwrds dont match */
+    const pwrdchks: any = ref({
+        upper: false,
+        number: false,
+        special: false
+    })
 
     const chgopt =()=> {
-        for (let i = 0; i < errmsgs.value.length; i++) errmsgs.value[i] = false
+        for (let i = 0; i < errmsgs.value.length; i++) errmsgs.value[i] = undefined
         option.value = !option.value
     }
     const loghdl =()=> {
@@ -76,13 +121,27 @@
             
         }
     }
-    const chkcreds =(e: any, field: string)=> {
+    const chkcreds =(e: any, field: any)=> {
         if (option.value) {
-            switch (field) {
-                case 'username':
-                    errmsgs.value[1] = !e.target.validity.valid
+            //console.info(e.target.validity)
+            if (!field) {
+                // confirm password
+                return
             }
+            if (!creds.value[field].length) errmsgs.value[field + 1] = undefined
+            else errmsgs.value[field + 1] = !e.target.validity.valid           
         }
+    }
+    const blocksp =(e: any)=> {
+        if (e.code === 'Space') e.preventDefault()
+    }
+    const strbar =()=> {
+        let score: number = 0
+        let val = pwrdchks.value
+        if (pwrdchks.value.upper) score++
+        if (pwrdchks.value.number) score++
+        if (pwrdchks.value.special) score++
+        return Math.floor(score * 10)
     }
 
     onUpdated(() => {
@@ -90,7 +149,11 @@
         if (option.value) chk &= creds.value[2].length
         dis.value = !chk
 
+        pwrdchks.value.upper = /[A-Z]/.test(creds.value[1])
+        pwrdchks.value.number = /[0-9]/.test(creds.value[1])
+        pwrdchks.value.special = /[^A-Za-z0-9]/.test(creds.value[1])
 
+        console.log(strbar(), pwrdchks.value)
     })
 </script>
 
