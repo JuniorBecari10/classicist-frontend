@@ -19,23 +19,31 @@
 
             <form class="bg-[#252525] grid cols-1 gap-8 justify-items-center" @submit.prevent="loghdl">
                 <section class="grid gap-6 justify-items-center text-[#a3a3a3]">
-                    <input type="text" placeholder="Username" v-model="creds[0]" 
-                    :minlength="option ? '3' : ''" 
+                    <input type="text" placeholder="Username" v-model="creds[0]" @input="chkcreds($event, 'username')"
+                    :minlength="option ? '4' : ''" 
                     :maxlength="option ? '16' : ''"
-                    pattern="[a-zA-Z0-9]+">
+                    :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
+                    <svg class="absolute top-40 right-10" fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve">
+                        <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z" fill="white"/>
+                        <rect fill="none" width="10" height="10"/>
+                    </svg>
+                    <span class="w-full  -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[90%]" v-if="errmsgs[1]">
+                        Username must have more than 3 characters.
+                    </span>
 
                     <input type="password" placeholder="Password" v-model="creds[1]" 
                     :minlength="option ? '8' : ''" 
                     :maxlength="option ? '16' : ''"
-                    pattern="[a-zA-Z0-9]+">
+                    :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
 
                     <section class="overflow-hidden transition-all transition-discrete delay-0 duration-1000 ease-linear" 
                     :class="option ? 'max-h-[500px]' : 'max-h-0'"> <!-- Arrumar espaçamento extra -->
                         <input type="password" placeholder="Confirm Password" v-model="creds[2]">
                     </section>
 
-                    <span class="w-full hidden -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[90%]" ref="errtxt"
-                    v-if="!option && 1" >Usuário ou senha incorretos.</span>
+                    <span class="w-full -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[90%]" v-if="errmsgs[0]">
+                        Username or password incorrect.
+                    </span>
                 </section>
 
                 <input type="submit" :value="option ? 'Sign Up' : 'Login'" class="bg-white rounded-[7px] text-black px-10 py-3 justify-center transition width delay-0.4" :disabled="dis">
@@ -47,24 +55,42 @@
 <script setup lang = "ts">
     import { onUpdated, ref } from 'vue';
 
-    const option = ref(false)
-    const chgopt =()=> option.value = !option.value
+    const option = ref(true)
     const creds = ref(['', '', ''])
     const dis = ref(true)
-    const errtxt = ref(null)
+    const errmsgs: any = ref([false, false, false, false])
 
+    const chgopt =()=> {
+        for (let i = 0; i < errmsgs.value.length; i++) errmsgs.value[i] = false
+        option.value = !option.value
+    }
     const loghdl =()=> {
-        if (creds.value[0] === 'user' && creds.value[1] === '123abc@') {
-            // Enviar para main page
+        if (!option.value) {
+            if (creds.value[0] + creds.value[1] === 'antonio123abCD@') {
+                alert('Login succeded')
+                // enviar para home page
+            } else {
+                errmsgs.value[0] = true
+            }
         } else {
-            errtxt.value.style.display = 'block'
+            
+        }
+    }
+    const chkcreds =(e: any, field: string)=> {
+        if (option.value) {
+            switch (field) {
+                case 'username':
+                    errmsgs.value[1] = !e.target.validity.valid
+            }
         }
     }
 
     onUpdated(() => {
-            let chk = (creds.value[0].length && creds.value[1].length)
-            if (option.value) chk &= creds.value[2].length
-            dis.value = (chk ? false : true)
+        let chk = (creds.value[0].length && creds.value[1].length)
+        if (option.value) chk &= creds.value[2].length
+        dis.value = !chk
+
+
     })
 </script>
 
