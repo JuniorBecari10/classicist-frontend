@@ -39,10 +39,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div ref="container" class="flex w-full h-full overflow-hidden">
+    <div ref="container" class="flex flex-1 w-full h-full overflow-hidden">
         <!-- Left panel -->
         <div
-            class="h-full flex-shrink-0 min-w-1/6 max-w-2/3"
+            class="flex-shrink-0 min-w-1/6 max-w-2/3"
             :style="{ width: `${leftWidth}%` }"
         >
             <slot name="left" />
@@ -55,7 +55,7 @@ onUnmounted(() => {
         ></div>
 
         <!-- Right panel -->
-        <div class="flex-1 h-full">
+        <div class="flex-1">
             <slot name="right" />
         </div>
     </div>
