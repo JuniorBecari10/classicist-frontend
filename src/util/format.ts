@@ -25,8 +25,14 @@ export function convertFormatTime(duration: number): string {
 }
 
 export function formatTitleDisplay(title: WorkTitle): string {
-    return `${title.kind} No. ${title.number}${
-        title.nickname ? `: "${title.nickname}"` : ""
+    return `${title.kind}${
+        title.number
+            ? ` No. ${title.number}`
+            : ""
+    }${
+        title.nickname
+            ? `: "${title.nickname}"`
+            : ""
     }`;
 }
 

@@ -1,40 +1,43 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import ButtonText from "../util/ButtonText.vue";
-import { getRecsForWork, getWork, useFetch } from "@/util/fetch.ts";
-import { formatTitleDisplay, formatDisplayAuthors } from "@/util/format.ts";
-import { BACKEND_URL } from "@/util/consts.ts";
+    import { computed } from "vue";
+    
+    import { getRecsForWork, getWork, useFetch } from "@/util/fetch.ts";
+    import { formatTitleDisplay, formatDisplayAuthors } from "@/util/format.ts";
+    import { BACKEND_URL } from "@/util/consts.ts";
 
-const props = defineProps<{
-    workId: number;
-}>();
+    import ButtonText from "../util/ButtonText.vue";
 
-// Fetch work and recommendations
-const { data: recs, loading: loadingRecs, error: errorRecs } =
-    useFetch(() => getRecsForWork(props.workId));
+    const props = defineProps<{
+        workId: number;
+    }>();
 
-const { data: work, loading: loadingWork, error: errorWork } =
-    useFetch(() => getWork(props.workId));
+    // Fetch work and recommendations
+    const { data: recs, loading: loadingRecs, error: errorRecs } =
+        useFetch(() => getRecsForWork(props.workId));
 
-// Computed work data
-const workData = computed(() => work.value ?? null);
+    const { data: work, loading: loadingWork, error: errorWork } =
+        useFetch(() => getWork(props.workId));
 
-// Computed random recommendation data
-const recData = computed(() => {
-    if (!recs.value || recs.value.length === 0) return null;
+    // Computed work data
+    const workData = computed(() => work.value ?? null);
 
-    const recIndex = Math.floor(Math.random() * recs.value.length);
-    const rec = recs.value[recIndex];
+    // Computed random recommendation data
+    const recData = computed(() => {
+        if (!recs.value || recs.value.length === 0)
+            return null;
 
-    return {
-        perfs: rec.performers ?? [],
-        imagePath: `${BACKEND_URL}/public/images/covers/${rec.photo_path}`,
-    };
-});
+        const recIndex = Math.floor(Math.random() * recs.value.length);
+        const rec = recs.value[recIndex];
 
-function click() {
-    // handle click action
-}
+        return {
+            perfs: rec.performers?.map(p => p.performer) ?? [],
+            imagePath: `${BACKEND_URL}/public/images/covers/${rec.photo_path}`,
+        };
+    });
+
+    function click() {
+        // handle click action
+    }
 </script>
 
 <template>
