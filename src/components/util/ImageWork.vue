@@ -29,16 +29,16 @@
 <template>
     <Button :action="click">
         <template v-if="loading">
-            <div class="size-45 bg-gray-300 animate-pulse rounded-md mb-2"></div>
+            <div class="size-40 bg-gray-300 animate-pulse rounded-md mb-2"></div>
         </template>
 
         <template v-else-if="error">
-            <div class="size-45 bg-red-500 animate-pulse rounded-md mb-2"></div>
+            <div class="size-40 bg-red-500 animate-pulse rounded-md mb-2"></div>
         </template>
 
         <template v-else>
             <img
-                class="rounded-sm size-45 object-cover"
+                class="rounded-sm size-40 object-cover"
                 :src="imagePath"
                  crossorigin="anonymous"
             />
