@@ -11,17 +11,14 @@
         workId: number;
     }>();
 
-    // Fetch work and recommendations
     const { data: recs, loading: loadingRecs, error: errorRecs } =
         useFetch(() => getRecsForWork(props.workId));
 
     const { data: work, loading: loadingWork, error: errorWork } =
         useFetch(() => getWork(props.workId));
 
-    // Computed work data
     const workData = computed(() => work.value ?? null);
 
-    // Computed random recommendation data
     const recData = computed(() => {
         if (!recs.value || recs.value.length === 0)
             return null;
@@ -36,7 +33,7 @@
     });
 
     function click() {
-        // handle click action
+        // TODO
     }
 </script>
 
@@ -54,14 +51,14 @@
             <img
                 class="rounded-md size-10"
                 :src="recData.imagePath"
-                crossorigin="anonymous"
-            />
+                crossorigin="anonymous" />
 
             <div class="flex-1 ml-4 flex flex-col items-start justify-center">
-                <span class="text-[15px] font-semibold font-fredoka truncate">
+                <span class="text-[1rem] font-semibold font-fredoka truncate">
                     {{ formatTitleDisplay(workData.title) }}
                 </span>
-                <span class="text-[11px] truncate">
+
+                <span class="text-xs truncate text-fgray">
                     {{ formatDisplayAuthors(workData.composer, recData.perfs) }}
                 </span>
             </div>
