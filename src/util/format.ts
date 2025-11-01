@@ -41,7 +41,7 @@ export function formatTitleDisplay(title: WorkTitle): string {
 function joinTempoMarkings(tempos: TempoMarking[]): string {
     return tempos
         .map(formatTempoMarking)
-        .join(" - ");
+        .join(" ― ");
 }
 
 function formatTempoMarking(tempo: TempoMarking): string {

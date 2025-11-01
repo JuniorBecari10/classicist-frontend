@@ -24,7 +24,7 @@
 </script>
 
 <template>
-    <div class="flex flex-col items-center justify-start bg-fg rounded-xl">
+    <div class="flex flex-col items-center justify-start bg-fg rounded-xl h-full">
         <div class="flex p-2 w-full">
             <ButtonBg :action="home"> <img class="w-4" src="@/assets/images/home.png" /> </ButtonBg>
             <SearchBar v-model="search">Search your library</SearchBar>
