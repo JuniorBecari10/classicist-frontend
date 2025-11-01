@@ -1,12 +1,14 @@
 <script setup lang="ts">
-    import Button from "../util/Button.vue";
+    import { computed } from "vue";
+    
     import { getRecsForWork, getWork, useFetch } from "@/util/fetch.ts";
     import { formatTitleDisplay, formatDisplayAuthors } from "@/util/format.ts";
-    import { computed } from "vue";
     import { BACKEND_URL } from "@/util/consts.ts";
+    
+    import Button from "../util/Button.vue";
 
     const props = defineProps<{
-        workId: number,
+        workId: number;
     }>();
 
     const { data: recs, loading: loadingRecs, error: errorRecs } =
@@ -14,10 +16,6 @@
 
     const { data: work, loading: loadingWork, error: errorWork } =
         useFetch(() => getWork(props.workId));
-
-    function click() {
-        
-    }
 
     const workData = computed(() => work.value ?? null);
 
@@ -33,25 +31,28 @@
             imagePath: `${BACKEND_URL}/public/images/covers/${rec.photo_path}`,
         };
     });
+
+    function click() {
+        // TODO
+    }
 </script>
 
 <template>
-    <Button :action="click">
-        <template v-if="loadingRecs || loadingWork">
-            <div class="size-40 bg-gray-300 animate-pulse rounded-md mb-2"></div>
-        </template>
+    <template v-if="loadingRecs || loadingWork">
+        <div class="size-40 bg-gray-300 animate-pulse rounded-md mb-2"></div>
+    </template>
 
-        <template v-else-if="errorRecs || errorWork">
-            <div class="size-40 bg-red-500 animate-pulse rounded-md mb-2"></div>
-        </template>
+    <template v-else-if="errorRecs || errorWork">
+        <div class="size-40 bg-red-500 animate-pulse rounded-md mb-2"></div>
+    </template>
 
-        <template v-else-if="workData && recData">
+    <template v-else-if="workData && recData">
+        <Button :action="click">
             <img
                 class="rounded-sm size-40 object-cover"
                 :src="recData.imagePath"
-                :title="`${formatTitleDisplay(workData.title)} • ${formatDisplayAuthors(recData.perfs)}`"
-                 crossorigin="anonymous"
-            />
-        </template>
-    </Button>
+                :title="`${formatTitleDisplay(workData.title)}\n${formatDisplayAuthors(workData.composer, recData.perfs)}`"
+                 crossorigin="anonymous" />
+        </Button>
+    </template>
 </template>
