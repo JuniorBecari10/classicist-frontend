@@ -54,11 +54,11 @@
                 crossorigin="anonymous" />
 
             <div class="flex-1 ml-4 flex flex-col items-start justify-center">
-                <span class="text-[1rem] font-semibold font-fredoka truncate">
+                <span class="text-[1rem] font-semibold font-fredoka truncate max-w-[95%]">
                     {{ formatTitleDisplay(workData.title) }}
                 </span>
 
-                <span class="text-xs truncate text-fgray">
+                <span class="text-xs truncate text-fgray max-w-[95%]">
                     {{ formatDisplayAuthors(workData.composer, recData.perfs) }}
                 </span>
             </div>

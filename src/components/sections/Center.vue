@@ -31,16 +31,16 @@
 </script>
 
 <template>
-    <div class="flex-1 bg-fg rounded-xl overflow-y-auto">
+    <div class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
         <h1 class="mt-6 ml-6 text-[32px] font-bold">Welcome back, Antônio!</h1>
 
         <p class="ml-6 mt-4 text-[15px]">Recommended for you</p>
-        <div class="flex ml-4 mt-4 gap-2 overflow-auto">
+        <div class="flex pl-4 mt-4 gap-2 overflow-auto">
             <ImageWork :workId="id" v-for="id in ids" />
         </div>
 
-        <p class="ml-6 mt-6 text-[15px]">We think you might like these...</p>
-        <div class="grid grid-cols-2 gap-2 mx-4 mt-4">
+        <p class="ml-6 mt-10 text-[15px]">We think you might like these...</p>
+        <div class="grid grid-cols-2 gap-2 mx-4 mt-4 max-h-[20%]">
             <WorkTile :workId="id" v-for="id in tileIds" />
         </div>
     </div>

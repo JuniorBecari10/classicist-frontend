@@ -7,6 +7,7 @@ export function formatDisplayWork(dw: DisplayWork): string {
 }
 
 export function formatDisplayAuthors(composer: Composer, performers: Performer[]): string {
+    console.debug(performers.map(p => p.name).join(", "));
     return `${composer.name} | ${performers.map(p => p.name).join(", ")}`;
 }
 
