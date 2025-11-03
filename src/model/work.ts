@@ -1,4 +1,4 @@
-enum Note {
+export enum Note {
     C,
     CSharp,
     DFlat,
@@ -18,12 +18,12 @@ enum Note {
     B,
 }
 
-enum KeyMode {
+export enum KeyMode {
     Major,
     Minor,
 }
 
-type Option<T> = T | null;
+export type Option<T> = T | null;
 
 export interface WorkTitle {
     kind: string;
