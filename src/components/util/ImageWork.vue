@@ -2,7 +2,7 @@
     import { computed } from "vue";
     
     import { getRecsForWork, getWork, useFetch } from "@/util/fetch.ts";
-    import { formatTitleDisplay, formatDisplayAuthors } from "@/util/format.ts";
+    import { formatTitleDisplayKey, formatDisplayAuthors } from "@/util/format.ts";
     import { BACKEND_URL } from "@/util/consts.ts";
     
     import Button from "../util/Button.vue";
@@ -51,7 +51,7 @@
             <img
                 class="rounded-sm size-40 object-cover"
                 :src="recData.imagePath"
-                :title="`${formatTitleDisplay(workData.title)}\n${formatDisplayAuthors(workData.composer, recData.perfs)}`"
+                :title="`${formatTitleDisplayKey(workData.title, workData.key.note, workData.key.mode)}\n${formatDisplayAuthors(workData.composer, recData.perfs)}`"
                  crossorigin="anonymous" />
         </Button>
     </template>
