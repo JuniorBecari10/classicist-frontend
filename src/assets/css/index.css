@@ -20,6 +20,7 @@ html, body {
     --font-fredoka: "Fredoka", sans-serif;
     --font-jetbrains: "JetBrains Mono", monospace;
 
+    --color-fg-dimmed: #151515;
     --color-fg: #252525;
     --color-fg-lighter: #3C3C3C;
     --color-fg-more-lighter: #4F4F4F;

@@ -1,42 +1,42 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { ref, watchEffect } from "vue";
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
     import { BACKEND_URL } from "@/util/consts.ts";
-    
+    import { usePlayerStore } from "@/stores/player.ts";
+
     import Current from "./Current.vue";
     import Progress from "./Progress.vue";
     import Controls from "./Controls.vue";
 
-    const workTitle = ref({
-        kind: "Symphony",
-        number: 5,
-        nickname: "Fate",
-    } satisfies WorkTitle);
-
-    const displayWork = ref({
-        title: workTitle.value,
-        tempos: [{form: null, name: "Allegro con brio"}],
-        movementNumber: 1,
-    } satisfies DisplayWork);
-
-    const performers = ref<Performer[]>([
-        {
-            name: "Herbert von Karajan",
-        },
-    ]);
-
-    const composer = { name: 'Ludwig van Beethoven' };
-
     const audio = ref<HTMLAudioElement | null>(null);
+    const store = usePlayerStore();
+
+    const displayWork = ref<any>(null);
+    const composer = ref<any>(null);
+    const performers = ref<any[]>([]);
+
+    const isPlaying = ref(false);
+
+    watchEffect(() => {
+        if (!store.hasNext || !displayWork.value) {
+            document.title = "Classicist";
+            return;
+        }
+
+        const prefix = isPlaying.value ? "▶ " : "";
+        document.title = `${prefix}${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer.value, performers.value)} ― Classicist`;
+    });
 
     function handlePlay() {
-        audio.value?.play();
-        document.title = `▶ ${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
+        if (!audio.value) return;
+        audio.value.play();
+        isPlaying.value = true;
     }
 
     function handlePause() {
-        audio.value?.pause();
-        document.title = `${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
+        if (!audio.value) return;
+        audio.value.pause();
+        isPlaying.value = false;
     }
 
     function handleSeek(progress: number) {
@@ -58,30 +58,41 @@
             audio.value.volume = percent;
     }
 
-    document.title = `${formatDisplayWork(displayWork.value)} • ${formatDisplayAuthors(composer, performers.value)} ― Classicist`;
+    // ---
+
+    function mp3Link(name: string): string {
+        return `${BACKEND_URL}/public/audio/${name}`;
+    }
 </script>
 
 <template>
-    <audio ref="audio" :src="`${BACKEND_URL}/public/audio/symp5-1.mp3`"></audio>
+    <div v-if="!store.hasNext" class="w-full mt-2 h-22 bg-fg-dimmed rounded-lg flex flex-col justify-center items-center">
+        <h1 class="text-xl font-semibold">No pieces to play!</h1>
+        <p>Select a movement to start listening.</p>
+    </div>
+    
+    <div v-else>
+        <audio ref="audio" :src=""></audio>
 
-    <div class="w-full mt-2">
-        <div class="w-full h-22 bg-fg rounded-lg flex items-center">
-            <Current
-                :work="displayWork"
-                :composer="composer"
-                :performers="performers"
-                 imageName="symp5.jpg"
-            />
-            <Progress
-                :length="433"
-                @pause="handlePause"
-                @play="handlePlay"
-                @seek="handleSeek"
-                @rewind="handleRewind"
-                @previous="handlePrevious"
-            />
+        <div class="w-full mt-2">
+            <div class="w-full h-22 bg-fg rounded-lg flex items-center">
+                <Current
+                    :work="displayWork"
+                    :composer="composer"
+                    :performers="performers"
+                     imageName="symp5.jpg"
+                />
+                <Progress
+                    :length="433"
+                    @pause="handlePause"
+                    @play="handlePlay"
+                    @seek="handleSeek"
+                    @rewind="handleRewind"
+                    @previous="handlePrevious"
+                />
 
-            <Controls @volume="handleVolume" />
+                <Controls @volume="handleVolume" />
+            </div>
         </div>
     </div>
 </template>
