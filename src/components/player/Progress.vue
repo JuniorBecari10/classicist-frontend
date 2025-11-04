@@ -6,6 +6,8 @@
 
     const props = defineProps<{
         length: number,
+        hasPrevious: boolean,
+        hasNext: boolean,
     }>();
     
     const emit = defineEmits<{
@@ -14,6 +16,7 @@
         (e: "seek", progress: number): void;
         (e: "rewind"): void;
         (e: "previous"): void;
+        (e: "next"): void;
     }>();
 
     const current = ref(0);
@@ -61,8 +64,8 @@
             emit("rewind");
     }
 
-    function forward() {
-        
+    function next() {
+        emit("next");
     }
 
     function togglePause() {
@@ -111,7 +114,8 @@
         <div class="w-full h-1/2 flex justify-center">
             <div class="flex w-1/5 h-full justify-evenly items-center">
                 <Button :action="rewind">
-                    <img src="@/assets/images/back.png" />
+                    <img v-show="props.hasPrevious" src="@/assets/images/back.png" />
+                    <img v-show="!props.hasPrevious" src="@/assets/images/back-dimmed.png" />
                 </Button>
 
                 <Button :action="togglePause">
@@ -119,8 +123,9 @@
                     <img v-show="!paused" src="@/assets/images/pause.png" />
                 </Button>
 
-                <Button :action="forward">
-                    <img src="@/assets/images/forward.png" />
+                <Button :action="next">
+                    <img v-show="props.hasNext" src="@/assets/images/next.png" />
+                    <img v-show="!props.hasNext" src="@/assets/images/next-dimmed.png" />
                 </Button>
             </div>
         </div>

@@ -59,7 +59,7 @@ interface SheetMusic {
     path: string;
 }
 
-interface Movement {
+export interface Movement {
     nickname: Option<string>;
     form: Option<string>;
     lyrics: Option<string[]>;
