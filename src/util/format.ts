@@ -98,7 +98,7 @@ function formatTempoMarking(tempo: TempoMarking): string {
 
 function toRoman(num: number): string {
     if (num <= 0 || num >= 4000) {
-        throw new Error("Number must be between 1 and 3999");
+        throw new Error(`Number must be between 1 and 3999; got ${num}`);
     }
 
     const romanMap: [number, string][] = [
