@@ -150,7 +150,6 @@
                     @previous="handlePrevious"
                     @next="handleNext"
                 />
-
                 <Controls @volume="handleVolume" />
             </div>
         </div>
