@@ -33,6 +33,7 @@ export function useFetch<T>(fetchFn: () => Promise<T>) {
     const load = async () => {
         loading.value = true;
         error.value = null;
+
         try {
             data.value = await fetchFn();
         } catch (err: any) {
@@ -43,6 +44,5 @@ export function useFetch<T>(fetchFn: () => Promise<T>) {
     };
 
     onMounted(load);
-
     return { data, loading, error, reload: load };
 }

@@ -1,188 +1,122 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import type { Work, Movement } from "@/model/work";
+import type { Recording, RecordedMovement } from "@/model/recording";
 
 export const usePlayerStore = defineStore("player", () => {
-    const queue = ref<Work[]>([]);
-    const currentWorkIndex = ref<number>(-1); // which work in queue
-    const currentMovementIndex = ref<number>(-1); // which movement in current work
-    const recordingIndex = ref<number>(-1); // which recording in current movement
+    // --- State ---
+    const queue = ref<Recording[]>([]);
+    const currentRecordingIndex = ref(-1);
+    const currentMovementIndex = ref(-1);
 
-    // --- Computed values ---
-
-    const currentWork = computed(() =>
-        currentWorkIndex.value >= 0 && currentWorkIndex.value < queue.value.length
-            ? queue.value[currentWorkIndex.value]
+    // --- Computed ---
+    const currentRecording = computed<Recording | null>(() =>
+        currentRecordingIndex.value >= 0 && currentRecordingIndex.value < queue.value.length
+            ? queue.value[currentRecordingIndex.value]
             : null
     );
 
-    const currentMovement = computed<Movement | null>(() => {
-        const work = currentWork.value;
-        if (!work) return null;
+    const currentMovement = computed<RecordedMovement | null>(() => {
+        const rec = currentRecording.value;
+        if (!rec) return null;
 
-        const movements = work.movements;
         if (
             currentMovementIndex.value < 0 ||
-            currentMovementIndex.value >= movements.length
+            currentMovementIndex.value >= rec.movements.length
         )
             return null;
 
-        return movements[currentMovementIndex.value];
+        return rec.movements[currentMovementIndex.value];
     });
-
-    const current = computed(() => ({
-        work: currentWork.value,
-        movement: currentMovement.value,
-        recordingIndex: recordingIndex.value,
-    }));
-
-    // --- Recording helpers (optional multiple recordings per movement) ---
-    const recordings = computed(() => {
-        const movement = currentMovement.value as any;
-        return movement?.recordings ?? [];
-    });
-
-    const currentRecording = computed(() => {
-        if (
-            recordingIndex.value >= 0 &&
-            recordingIndex.value < recordings.value.length
-        )
-            return recordings.value[recordingIndex.value];
-        return null;
-    });
-
-    const hasNextRecording = computed(
-        () => recordingIndex.value < recordings.value.length - 1
-    );
-    const hasPreviousRecording = computed(() => recordingIndex.value > 0);
-
-    // --- Movement / Work navigation ---
 
     const hasNextMovement = computed(() =>
-        currentWork.value
-            ? currentMovementIndex.value < currentWork.value.movements.length - 1
+        currentRecording.value
+            ? currentMovementIndex.value < currentRecording.value.movements.length - 1
             : false
     );
-    const hasPreviousMovement = computed(
-        () => currentMovementIndex.value > 0
+
+    const hasPreviousMovement = computed(() =>
+        currentMovementIndex.value > 0
     );
 
-    const hasNextWork = computed(
-        () => currentWorkIndex.value < queue.value.length - 1
-    );
-    const hasPreviousWork = computed(() => currentWorkIndex.value > 0);
-
-    // unified getters for UI (include movement + work transitions)
-    const hasNext = computed(
-        () =>
-            hasNextRecording.value ||
-            hasNextMovement.value ||
-            hasNextWork.value
+    const hasNextRecording = computed(() =>
+        currentRecordingIndex.value < queue.value.length - 1
     );
 
-    const hasPrevious = computed(
-        () =>
-            hasPreviousRecording.value ||
-            hasPreviousMovement.value ||
-            hasPreviousWork.value
+    const hasPreviousRecording = computed(() =>
+        currentRecordingIndex.value > 0
     );
 
-    // --- Core functions ---
+    // Unified helpers for UI
+    const hasNext = computed(() =>
+        hasNextMovement.value || hasNextRecording.value
+    );
 
-    function addWork(work: Work) {
-        queue.value.push(work);
+    const hasPrevious = computed(() =>
+        hasPreviousMovement.value || hasPreviousRecording.value
+    );
 
-        // Initialize if nothing is set
-        if (currentWorkIndex.value === -1) {
-            currentWorkIndex.value = 0;
+    // --- Core Functions ---
+
+    function addRecording(rec: Recording) {
+        queue.value.push(rec);
+        if (currentRecordingIndex.value === -1) {
+            currentRecordingIndex.value = 0;
             currentMovementIndex.value = 0;
-            recordingIndex.value = 0;
         }
     }
 
-    function removeWork(index: number) {
+    function removeRecording(index: number) {
         if (index < 0 || index >= queue.value.length) return;
-
         queue.value.splice(index, 1);
 
-        if (index < currentWorkIndex.value) currentWorkIndex.value--;
+        if (index < currentRecordingIndex.value)
+            currentRecordingIndex.value--;
 
         if (queue.value.length === 0) {
-            currentWorkIndex.value = -1;
+            currentRecordingIndex.value = -1;
             currentMovementIndex.value = -1;
-            recordingIndex.value = -1;
-        } else if (currentWorkIndex.value >= queue.value.length) {
-            currentWorkIndex.value = queue.value.length - 1;
+        } else if (currentRecordingIndex.value >= queue.value.length) {
+            currentRecordingIndex.value = queue.value.length - 1;
             currentMovementIndex.value = 0;
-            recordingIndex.value = 0;
         }
     }
 
     function clear() {
         queue.value = [];
-        currentWorkIndex.value = -1;
+        currentRecordingIndex.value = -1;
         currentMovementIndex.value = -1;
-        recordingIndex.value = -1;
     }
 
     // --- Navigation ---
 
     function next() {
-        // Next recording
-        if (hasNextRecording.value) {
-            recordingIndex.value++;
-        }
-        // Next movement
-        else if (hasNextMovement.value) {
-            currentMovementIndex.value++;
-            recordingIndex.value = 0;
-        }
-        // Next work
-        else if (hasNextWork.value) {
-            currentWorkIndex.value++;
+        if (hasNextMovement.value) currentMovementIndex.value++;
+        else if (hasNextRecording.value) {
+            currentRecordingIndex.value++;
             currentMovementIndex.value = 0;
-            recordingIndex.value = 0;
         }
     }
 
     function previous() {
-        // Previous recording
-        if (hasPreviousRecording.value) {
-            recordingIndex.value--;
-        }
-        // Previous movement
-        else if (hasPreviousMovement.value) {
-            currentMovementIndex.value--;
-            const prevMov = currentWork.value?.movements[currentMovementIndex.value];
-            recordingIndex.value = (prevMov?.recordings?.length ?? 1) - 1;
-        }
-        // Previous work
-        else if (hasPreviousWork.value) {
-            currentWorkIndex.value--;
-            const prevWork = queue.value[currentWorkIndex.value];
-            currentMovementIndex.value = prevWork.movements.length - 1;
-            const lastMov = prevWork.movements[currentMovementIndex.value] as any;
-            recordingIndex.value = (lastMov?.recordings?.length ?? 1) - 1;
+        if (hasPreviousMovement.value) currentMovementIndex.value--;
+        else if (hasPreviousRecording.value) {
+            currentRecordingIndex.value--;
+            const prevRec = queue.value[currentRecordingIndex.value];
+            currentMovementIndex.value = prevRec.movements.length - 1;
         }
     }
 
     return {
         queue,
-        currentWorkIndex,
+        currentRecordingIndex,
         currentMovementIndex,
-        recordingIndex,
-
-        currentWork,
-        currentMovement,
         currentRecording,
-        recordings,
-        current,
-
+        currentMovement,
         hasNext,
         hasPrevious,
 
-        addWork,
-        removeWork,
+        addRecording,
+        removeRecording,
         clear,
         next,
         previous,
