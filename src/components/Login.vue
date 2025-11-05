@@ -56,7 +56,8 @@
                     </div>
 
                     <div class="bg-gray-700 rounded-[12px] w-full h-1.5">
-                        <div class="bg-white h-full w-0 transition-all duration-300" :class="`w-[${strbar()}%]`"></div>
+                        <div class="bg-white h-full w-full transition-all duration-300" :style="`width: ${barmeter()}% !important;`">
+                        </div>
                     </div>
                     
                     <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="errmsgs[2]">
@@ -94,12 +95,14 @@
 
 <script setup lang = "ts">
     import { onUpdated, ref } from 'vue';
+    //import pwned from '../composables/pwned.ts'
 
     const option = ref(true)
-    const creds = ref(['', '', '']) /* username, password, confirm password */
+    const creds = ref(['', '12345', '']) /* username, password, confirm password */
     const dis = ref(true)
     const errmsgs: any = ref([undefined, undefined, undefined, undefined]) /* login failed, user reqs, pwrd reqs, pwrds dont match */
     const pwrdchks: any = ref({
+        length: false,
         upper: false,
         number: false,
         special: false
@@ -135,13 +138,45 @@
     const blocksp =(e: any)=> {
         if (e.code === 'Space') e.preventDefault()
     }
-    const strbar =()=> {
+    const barmeter =()=> {
         let score: number = 0
-        let val = pwrdchks.value
-        if (pwrdchks.value.upper) score++
-        if (pwrdchks.value.number) score++
-        if (pwrdchks.value.special) score++
-        return Math.floor(score * 10)
+        let reqs = pwrdchks.value
+        const dumb: string[] = ['abc', 'qwerty', 'password', 'admin', 'user', 'brasil', '102030']
+        const unique =()=> {
+            const chars: string[] = creds.value[1].split("")
+            if (!chars.length) return false
+            for (let p = 0; p < chars.length; p++) {
+                for (let i = p + 1; i < chars.length; i++) {
+                    if (chars[p] === chars[i]) return false
+                }
+            }
+            return true
+        }
+        const charseq =()=> {
+            const chars: string[] = creds.value[1].split("")
+            for (let i = 1; i < chars.length; i++) {
+                if (chars[i - 1] === chars[i] && chars[i + 1] === chars[i]) return true
+            }
+            return false
+        }
+        const numseq =()=> {
+            const nums: number[] = creds.value[1].split("").map(Number)
+            for (let i = 1; i < nums.length; i++) {
+                if (nums[i - 1] + 1 === nums[i] && nums[i + 1] - 1 === nums[i]) return true
+            }
+            return false
+        }
+
+        for (let r of Object.values(reqs)) if (r) score += 6
+        score += creds.value[1].length * 2
+        if (reqs.length > 12) score += 4
+        if (reqs.length === 16) score += 4
+        if (dumb.includes(creds.value[1])) score -= 15
+        if (unique()) score += 8
+        if (charseq()) score -= 10
+        if (numseq()) score -= 10
+
+        return (score > 0) ? score : 0
     }
 
     onUpdated(() => {
@@ -149,11 +184,14 @@
         if (option.value) chk &= creds.value[2].length
         dis.value = !chk
 
-        pwrdchks.value.upper = /[A-Z]/.test(creds.value[1])
-        pwrdchks.value.number = /[0-9]/.test(creds.value[1])
-        pwrdchks.value.special = /[^A-Za-z0-9]/.test(creds.value[1])
+        const patterns: RegExp[] = [/[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/]
+        let reqs = pwrdchks.value
 
-        console.log(strbar(), pwrdchks.value)
+        for (let k in reqs) {
+            let i: number = 0
+            if (k === 'length') reqs[k] = creds.value[1].length >= 8
+            else reqs[k] = patterns[i++].test(creds.value[1])
+        }
     })
 </script>
 
