@@ -79,16 +79,12 @@
 
     function handlePrevious() {
         store.previous();
-        
         audio.value.currentTime = 0;
-        handlePlay();
     }
 
     function handleNext() {
         store.next();
-        
         audio.value.currentTime = 0;
-        handlePlay();
     }
 
     function handleVolume(percent: number) {
