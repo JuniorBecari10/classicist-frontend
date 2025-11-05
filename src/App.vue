@@ -7,9 +7,9 @@
 
     import { usePlayerStore } from "./stores/player.ts";
 
-    const work = {"id":7,"title":{"kind":"Serenade","number":13,"nickname":"Eine kleine Nachtmusik"},"key":{"note":10,"mode":0},"composer":{"id":3,"name":"Wolfgang Amadeus Mozart","birth_year":1756,"death_year":1791,"photo_path":"mozart.jpg"},"catalog":{"prefix":"K.","number":"525","subnumber":null},"movements":[{"nickname":null,"form":null,"lyrics":null,"tempo_markings":[{"form":null,"name":"Allegro"}],"sheet":{"path":"eine-1.mxl"}},{"nickname":null,"form":"Romanze","lyrics":null,"tempo_markings":[{"form":null,"name":"Andante"}],"sheet":{"path":"eine-2.mxl"}},{"nickname":null,"form":"Menuetto","lyrics":null,"tempo_markings":[{"form":null,"name":"Allegretto"}],"sheet":{"path":"eine-3.mxl"}},{"nickname":null,"form":"Rondo","lyrics":null,"tempo_markings":[{"form":null,"name":"Allegro"}],"sheet":{"path":"eine-4.mxl"}}],"year":{"start_year":1787,"end_year":null}};
+    const rec = {"id":9,"work_id":7,"year":1966,"photo_path":"eine.jpg","performers":[{"id":17,"performer":{"id":8,"name":"Herbert von Karajan"},"role":"Conductor"},{"id":18,"performer":{"id":9,"name":"Berliner Philharmoniker"},"role":"Orchestra"}],"movements":[{"id":17,"movement_index":0,"movement_id":17,"audio_file":{"path":"eine-1.mp3","duration":334}},{"id":18,"movement_index":0,"movement_id":18,"audio_file":{"path":"eine-2.mp3","duration":326}},{"id":19,"movement_index":0,"movement_id":19,"audio_file":{"path":"eine-3.mp3","duration":146}},{"id":20,"movement_index":0,"movement_id":20,"audio_file":{"path":"eine-4.mp3","duration":195}}]};
 
-    usePlayerStore().addWork(work);
+    usePlayerStore().addRecording(rec);
 </script>
 
 <template>

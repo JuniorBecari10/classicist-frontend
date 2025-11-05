@@ -14,7 +14,7 @@ interface RecordingPerformer {
   role: string; 
 }
 
-interface RecordedMovement {
+export interface RecordedMovement {
   id: number;
   movementIndex: number; 
   movementId: number;
