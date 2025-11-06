@@ -12,7 +12,14 @@
     <h1 class="text-[40px] text-wrap w-90 text-center font-[Old_Standard_TT] leading-13 ">The next-level classical music app.</h1>
     <p  class="text-[24px] text-nowrap    text-center font-[Old_Standard_TT]">Discover a new way to listen to classical music.</p>
     <a  class="text-[20px] box-conten bg-white px-10 pt-3 pb-3 rounded-md text-black font-[Old_Standard_TT] mt-25">Listen now</a>
-    <a  class="text-[20px] box-conten bg-transparent px-15 pt-1 pb-2 rounded-md border-2 border-white font-[Old_Standard_TT] mt-5">See what Classicist offers</a>
+    <a href="#infos"  class="text-[20px] box-conten bg-transparent px-15 pt-1 pb-2 rounded-md border-2 border-white font-[Old_Standard_TT] mt-5">See what Classicist offers</a>
+    <div class="w-full" id="infos">
+      <div class="mt-40 flex items-center justify-center">
+        <div class="bg-white h-1 w-100"></div>
+        <p class="text-[24px] w-[50%] font-[Old_Standard_TT] mx-15 text-center">What makes Classicist great?</p>
+        <div class="bg-white h-1 w-100"></div>
+      </div>
+    </div>
   </div>
   
 </template>
