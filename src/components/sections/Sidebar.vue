@@ -2,6 +2,7 @@
     import { ref, computed } from "vue";
     import { formatKey } from "@/util/format.ts";
     import { useLibraryStore } from "@/stores/library.ts";
+    import { useCenterStore } from "@/stores/center.ts";
 
     import ButtonBg from "../util/ButtonBg.vue";
     import ButtonText from "../util/ButtonText.vue";
@@ -10,6 +11,8 @@
     import SidebarWork from "../util/SidebarWork.vue";
 
     const store = useLibraryStore();
+    const center = useCenterStore();
+
     const search = ref("");
 
     const filterWorks = ref(false);
@@ -99,7 +102,7 @@
     });
 
     function home() {
-        // TODO!
+        center.home();
     }
 </script>
 
