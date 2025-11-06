@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import type { Work, Composer } from "@/model/work";
 import type { Performer } from "@/model/recording";
+import type { LibraryItem } from "@/stores/library";
 
 export type CenterScreen =
     | { type: "work"; value: Work }
@@ -16,6 +17,10 @@ export const useCenterStore = defineStore("center", () => {
 
     function home() {
         screen.value = HOME;
+    }
+
+    function setRaw(l: LibraryItem) {
+        screen.value = l as CenterScreen;
     }
 
     function work(w: Work) {
@@ -59,6 +64,7 @@ export const useCenterStore = defineStore("center", () => {
         screen,
 
         home,
+        setRaw,
         work,
         composer,
         performer,

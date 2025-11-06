@@ -4,8 +4,11 @@
     import { getRecsForWork, getWork, useFetch } from "@/util/fetch.ts";
     import { formatTitleDisplay, formatDisplayAuthors } from "@/util/format.ts";
     import { BACKEND_URL } from "@/util/consts.ts";
+    import { useCenterStore } from "@/stores/center.ts";
 
     import ButtonText from "../util/ButtonText.vue";
+
+    const center = useCenterStore();
 
     const props = defineProps<{
         workId: number;
@@ -33,7 +36,7 @@
     });
 
     function click() {
-        // TODO
+        center.work(work);
     }
 </script>
 

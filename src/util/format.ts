@@ -81,8 +81,8 @@ function formatNote(note: Note) {
 
 function formatMode(mode: KeyMode) {
     switch (mode) {
-        case KeyMode.Major: return "Major";
-        case KeyMode.Minor: return "Minor";
+        case KeyMode.Major: return "major";
+        case KeyMode.Minor: return "minor";
     }
 }
 

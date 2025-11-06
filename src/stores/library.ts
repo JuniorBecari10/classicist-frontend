@@ -19,6 +19,18 @@ export const useLibraryStore = defineStore("library", () => {
             list.value.push(item);
     }
 
+    function addWork(work: Work) {
+        addItem({ type: "work", value: work });
+    }
+
+    function addComposer(composer: Composer) {
+        addItem({ type: "composer", value: composer });
+    }
+
+    function addPerformer(performer: Performer) {
+        addItem({ type: "performer", value: performer });
+    }
+
     function removeItem(index: number) {
         if (index < 0 || index >= list.value.length)
             return;
@@ -32,7 +44,11 @@ export const useLibraryStore = defineStore("library", () => {
 
     return {
         list,
-        addItem,
+
+        addWork,
+        addComposer,
+        addPerformer,
+
         removeItem,
         clear,
     };

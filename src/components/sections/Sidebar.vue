@@ -108,7 +108,7 @@
 
 <template>
     <div class="flex flex-col items-center justify-start bg-fg rounded-xl h-full">
-        <div v-if="filteredList.length === 0" class="flex p-2 w-full">
+        <div v-if="store.list.length === 0" class="flex p-2 w-full">
             <button
                 class="
                     flex items-center justify-center flex-shrink-0 rounded-md transition duration-200 filter
@@ -120,12 +120,12 @@
             </button>
         </div>
 
-        <div v-else>
+        <div v-else class="flex p-2 w-full">
             <ButtonBg :action="home"> <img class="w-4" src="@/assets/images/home.png" /> </ButtonBg>
             <SearchBar v-model="search">Search your library</SearchBar>
         </div>
 
-        <div v-if="filteredList.length !== 0" class="grid grid-rows-1 grid-cols-3 w-full py-1 px-2">
+        <div v-if="store.list.length !== 0" class="grid grid-rows-1 grid-cols-3 w-full py-1 px-2">
             <ButtonFilter v-model="filterWorks">Works</ButtonFilter>
             <ButtonFilter v-model="filterComposers">Composers</ButtonFilter>
             <ButtonFilter v-model="filterPerformers" :noMr="true">Performers</ButtonFilter>
@@ -133,12 +133,13 @@
 
         <div class="w-full h-full mt-2">
             <SidebarWork
-              v-for="item in filteredList"
-              :key="item.type + '-' + item.value.id"
-              :item="item"
+                v-for="(item, index) in filteredList"
+                :key="item.type + '-' + item.value.id"
+                :item="item"
+                :index="index"
             />
 
-            <div v-if="filteredList.length === 0" class="flex flex-col items-center justify-center w-full h-[80%]">
+            <div v-if="store.list.length === 0" class="flex flex-col items-center justify-center w-full h-[80%]">
                 <img src="@/assets/images/note.png" />
                 <p class="text-[1.15rem] font-semibold font-fredoka">The library is empty!</p>
                 <p class="text-sm text-fgray font-fredoka">Add some items here for easier access.</p>
