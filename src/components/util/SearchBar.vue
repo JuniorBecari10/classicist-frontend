@@ -17,7 +17,7 @@
 
     // When the input loses focus, clear & hide it
     function handleBlur() {
-        model.value = ""; // reset the external v-model value
+        // model.value = ""; // reset the external v-model value
         showInput.value = false;
     }
 </script>
