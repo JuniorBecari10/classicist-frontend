@@ -39,7 +39,7 @@
                         Username must have more than 3 characters.
                     </span>
 
-                    <div class="flex items-center">
+                    <div class="flex items-center z-10">
                         <input type="text" placeholder="Password" v-model="creds[1]" @input="chkcreds($event, 1)"
                             @keydown="blocksp"
                             :minlength="option ? '8' : ''" 
@@ -55,8 +55,9 @@
                         </svg>
                     </div>
 
-                    <div class="bg-gray-700 rounded-[12px] w-full h-1.5">
-                        <div class="bg-white h-full w-full transition-all duration-300" :style="`width: ${barmeter()}% !important;`">
+                    <div class="bg-gray-700 rounded-b-[8px] w-full h-12 -mt-16.75 z-0">
+                        <div class="bg-white rounded-b-[12px] h-full w-full transition-all duration-300" 
+                            :style="`width: ${barmeter()}% !important;`">
                         </div>
                     </div>
                     
@@ -98,7 +99,7 @@
     //import pwned from '../composables/pwned.ts'
 
     const option = ref(true)
-    const creds = ref(['', '12345', '']) /* username, password, confirm password */
+    const creds = ref(['', '', '']) /* username, password, confirm password */
     const dis = ref(true)
     const errmsgs: any = ref([undefined, undefined, undefined, undefined]) /* login failed, user reqs, pwrd reqs, pwrds dont match */
     const pwrdchks: any = ref({
@@ -172,11 +173,12 @@
         if (reqs.length > 12) score += 4
         if (reqs.length === 16) score += 4
         if (dumb.includes(creds.value[1])) score -= 15
-        if (unique()) score += 8
+        if (unique()) score += 4
         if (charseq()) score -= 10
         if (numseq()) score -= 10
+        console.log(score, reqs)
 
-        return (score > 0) ? score : 0
+        return (score > 0) ? score * 1.67 : 0
     }
 
     onUpdated(() => {
@@ -215,4 +217,5 @@
         background: #333;
         color: #808080
     }
+
 </style>

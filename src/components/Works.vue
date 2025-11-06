@@ -1,4 +1,11 @@
 <template>
+    <!-- <div
+        v-if="loading || !work"
+        class="w-full mt-2 h-22 bg-fg-dimmed rounded-lg flex flex-col justify-center items-center animate-pulse">
+        <h1 class="text-xl font-semibold">Loading work...</h1>
+        <p>Please wait a moment.</p>
+    </div> -->
+
     <div class="grid grid-cols-1 rounded-[24px] bg-[#303030] w-[calc(100vw-5rem)] h-auto justify-center justify-items-center" :class="{'pb-2': !hidden}">
         <!-- Work -->
         <div class="works" :class="{'mb-3': !hidden}" @click.self="flipWork">
@@ -65,6 +72,7 @@
             </div>
         </section>
     </div>
+
     <!-- 
     <div class="grid grid-cols-1 rounded-[36px] bg-[#303030] -mt-3 w-[calc(100vw-5rem)] h-auto justify-center justify-items-center">
         <div class="inline-flex rounded-full bg-[#3c3c3c] px-9 w-full h-[3.25rem] items-center justify-between">
@@ -85,10 +93,20 @@
 
 <script setup lang = "ts">
     import { ref } from 'vue';
+    //import {getWork, useFetch} from '@/util/fetch.ts'
+
+    //const props = defineProps<{workId: number}>()
+
     let hidden = ref(0)
     const flipWork = () => hidden.value ^= 1
     let performance = 'Herbert von Karajan • Berliner Philarmoniker ― 1984'
     
+    /* const { data: work, loading, error } = useFetch(() => {
+        if (!props.workId)
+            return null;
+        
+        return getWork(props.workId);
+    }); */
 </script>
 
 <style>
