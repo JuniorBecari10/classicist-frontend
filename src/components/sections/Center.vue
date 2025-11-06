@@ -2,6 +2,9 @@
     import ImageWork from "../util/ImageWork.vue";
     import WorkTile from "../util/WorkTile.vue";
 
+    import { useCenterStore } from "@/stores/center.ts";
+    const center = useCenterStore();
+
     function getUniqueRandomNumbers(a: number, b: number, n: number): number[] {
         if (b < a)
             throw new Error("Invalid range: b must be >= a");
@@ -31,7 +34,7 @@
 </script>
 
 <template>
-    <div class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
+    <div v-if="center.isHome()" class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
         <h1 class="mt-6 ml-6 text-[32px] font-bold">Good to see you, Antônio!</h1>
 
         <p class="ml-6 mt-4 text-[15px]">Recommended for you</p>
@@ -44,4 +47,8 @@
             <WorkTile :workId="id" v-for="id in tileIds" />
         </div>
     </div>
+
+    <div v-if="center.isWork()">work todo {{ center.screen.value }}</div>
+    <div v-if="center.isComposer()">composer todo {{ center.screen.value }}</div>
+    <div v-if="center.isPerformer()">performer todo {{ center.screen.value }}</div>
 </template>
