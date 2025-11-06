@@ -1,30 +1,39 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { Work } from "@/model/work";
+import type { Work, Composer } from "@/model/work";
+import type { Performer } from "@/model/recording";
 
-export const usePlayerStore = defineStore("player", () => {
-    const queue = ref<Work[]>([]);
+export type LibraryItem =
+    | { type: "work"; value: Work }
+    | { type: "composer"; value: Composer }
+    | { type: "performer"; value: Performer };
 
-    function addWork(work: Work) {
-        queue.value.push(work);
+export const useLibraryStore = defineStore("library", () => {
+    const list = ref<LibraryItem[]>([]);
+
+    function addItem(item: LibraryItem) {
+        const exists = list.value.some(q =>
+            q.type === item.type && (q.value as any).id === (item.value as any).id);
+
+        if (!exists)
+            list.value.push(item);
     }
 
-    function removeWork(index: number) {
-        if (index < 0 || index >= queue.value.length)
+    function removeItem(index: number) {
+        if (index < 0 || index >= list.value.length)
             return;
-        
-        queue.value.splice(index, 1);
+
+        list.value.splice(index, 1);
     }
 
     function clear() {
-        queue.value = [];
+        list.value = [];
     }
 
     return {
-        queue,
-
-        addWork,
-        removeWork,
+        list,
+        addItem,
+        removeItem,
         clear,
     };
 });
