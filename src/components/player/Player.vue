@@ -111,7 +111,7 @@
 <template>
     <div
         v-if="!rec || !movement"
-        class="w-full mt-2 h-22 bg-fg-dimmed flex flex-col justify-center items-center">
+        class="w-full mt-2 h-22 bg-fg-dimmed flex flex-col justify-center items-center rounded-lg">
         <h1 class="text-xl font-semibold">No recordings to play!</h1>
         <p class="text-fgray">Select a movement to start listening.</p>
     </div>
