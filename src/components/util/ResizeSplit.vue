@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
 
-const leftWidth = ref(28); // percentage width of the left panel
+const leftWidth = ref(26); // percentage width of the left panel
 const container = ref<HTMLElement | null>(null);
 const isDragging = ref(false);
 
