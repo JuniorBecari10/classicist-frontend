@@ -4,6 +4,7 @@
     import { useLibraryStore } from "@/stores/library.ts";
 
     import ButtonBg from "../util/ButtonBg.vue";
+    import ButtonText from "../util/ButtonText.vue";
     import ButtonFilter from "../util/ButtonFilter.vue";
     import SearchBar from "../util/SearchBar.vue";
     import SidebarWork from "../util/SidebarWork.vue";
@@ -104,12 +105,24 @@
 
 <template>
     <div class="flex flex-col items-center justify-start bg-fg rounded-xl h-full">
-        <div class="flex p-2 w-full">
+        <div v-if="filteredList.length === 0" class="flex p-2 w-full">
+            <button
+                class="
+                    flex items-center justify-center flex-shrink-0 rounded-md transition duration-200 filter
+                    hover:bg-fg-more-lighter cursor-pointer p-2 w-full box-border bg-fg-lighter
+                "
+                @click="home" v-ripple>
+                    <img class="w-4 mr-2" src="@/assets/images/home.png" />
+                    <span>Home</span>
+            </button>
+        </div>
+
+        <div v-else>
             <ButtonBg :action="home"> <img class="w-4" src="@/assets/images/home.png" /> </ButtonBg>
             <SearchBar v-model="search">Search your library</SearchBar>
         </div>
 
-        <div class="grid grid-rows-1 grid-cols-3 w-full py-1 px-2">
+        <div v-if="filteredList.length !== 0" class="grid grid-rows-1 grid-cols-3 w-full py-1 px-2">
             <ButtonFilter v-model="filterWorks">Works</ButtonFilter>
             <ButtonFilter v-model="filterComposers">Composers</ButtonFilter>
             <ButtonFilter v-model="filterPerformers" :noMr="true">Performers</ButtonFilter>
