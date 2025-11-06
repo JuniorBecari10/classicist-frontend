@@ -6,7 +6,7 @@ const props = defineProps<{ noMr?: boolean }>();
 
 const buttonClass = computed(() =>
     model.value
-        ? "bg-fg-more-lighter hover:bg-fg-even-more-lighter"
+        ? "bg-white text-black hover:bg-gray-200"
         : "bg-fg-lighter text-bg hover:bg-fg-more-lighter"
 );
 
@@ -19,7 +19,8 @@ function handleClick() {
     <button
         :class="`${buttonClass} px-5 h-9 flex items-center justify-center rounded-md transition-all duration-200 flex-shrink-0 cursor-pointer`"
         :style="{ marginRight: props.noMr ? 0 : 'calc(0.125rem * 4)' }"
-        @click="handleClick" v-ripple>
+        @click="handleClick"
+        v-ripple>
         <slot />
     </button>
 </template>
