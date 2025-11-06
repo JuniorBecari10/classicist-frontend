@@ -6,10 +6,13 @@
     import { BACKEND_URL } from "@/util/consts.ts";
     
     import Button from "../util/Button.vue";
+    import { useCenterStore } from "@/stores/center.ts";
 
     const props = defineProps<{
         workId: number;
     }>();
+
+    const center = useCenterStore();
 
     const { data: recs, loading: loadingRecs, error: errorRecs } =
         useFetch(() => getRecsForWork(props.workId));
@@ -33,7 +36,7 @@
     });
 
     function click() {
-        // TODO
+        center.work(work);
     }
 </script>
 
