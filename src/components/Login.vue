@@ -20,8 +20,9 @@
             <form class="bg-[#252525] grid cols-1 gap-8 justify-items-center" @submit.prevent="loghdl" novalidate>
                 <section class="grid gap-6 justify-items-center text-[#a3a3a3]">
                     
+                    <!-- Username Field -->
                     <div class="flex items-center">
-                        <input type="text" placeholder="Username" v-model="creds[0]" @input="chkcreds($event, 0)" 
+                        <input type="text" placeholder="Username" v-model="creds[0]" @input="chkcreds($event, 0)" class="outline-none"
                             :minlength="option ? '4' : ''"
                             :maxlength="option ? '16' : ''" 
                             :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
@@ -39,12 +40,24 @@
                         Username must have more than 3 characters.
                     </span>
 
-                    <div class="flex items-center z-10">
-                        <input type="text" placeholder="Password" v-model="creds[1]" @input="chkcreds($event, 1)"
-                            @keydown="blocksp"
-                            :minlength="option ? '8' : ''" 
-                            :maxlength="option ? '16' : ''"
-                            :pattern="option ? '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).+$' : '.*'">
+                    <!-- Password field -->
+                    <div class="flex items-center">
+                        <div class="bg-gray-700 rounded-[12px] w-full overflow-hidden relative transition-[padding]" 
+                            :class="`pb-${(creds[1].length && option) ? '1.25' : '0'}`">
+
+                            <div class="flex items-center">
+                                <input type="password" placeholder="Password" v-model="creds[1]" @input="chkcreds($event, 1)"
+                                    @keydown="blocksp"
+                                    :minlength="option ? '8' : ''" 
+                                    :maxlength="option ? '16' : ''"
+                                    :pattern="option ? '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).+$' : '.*'" class="relative z-20 flex-1 bg-transparent outline-none">
+
+                            </div>
+
+                            <div class="absolute left-0 right-0 bottom-0 h-4 rounded-b-[12px] z-10 transition-all duration-300" v-show="option" 
+                                :style="`width: ${pwrdscore()}%; background: ${strhue()}`">
+                            </div>
+                        </div>
 
                         <svg class="absolute right-10" v-if="errmsgs[2] === false" version="1.1" id="Layer_1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -53,22 +66,26 @@
                                 fill="white" />
                             <rect fill="none" />
                         </svg>
-                    </div>
-
-                    <div class="bg-gray-700 rounded-b-[8px] w-full h-12 -mt-16.75 z-0">
-                        <div class="bg-white rounded-b-[12px] h-full w-full transition-all duration-300" 
-                            :style="`width: ${barmeter()}% !important;`">
-                        </div>
-                    </div>
+                    </div>                    
+                    
+                    <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[80%] leading-5.5 transition-color duration-300" 
+                        v-if="creds[1].length && option" :style="{color: strhue()}">
+                            {{strlabel()}}
+                    </span>
+                    
+                    <span class="w-full max-w-[495px] -mt-10 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="option && found">
+                        This password was found on a database of known hacked passwords.
+                    </span>
                     
                     <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="errmsgs[2]">
                         Password must have at least have 8 characters including lower and uppercase, numbers and special ones.
                     </span>
 
+                    <!-- Confirm Password Field -->
                     <section class="overflow-hidden transition-all transition-discrete delay-0 duration-1000 ease-linear" 
                     :class="option ? 'max-h-[500px]' : 'max-h-0'"> <!-- Arrumar espaçamento extra -->
                         <div class="flex items-center">                            
-                            <input type="password" placeholder="Confirm Password" v-model="creds[2]" @input="chkcreds(null, null)">
+                            <input type="password" placeholder="Confirm Password" v-model="creds[2]" @input="chkcreds(null, 2)" class="outline-none">
                             <svg class="absolute right-10" v-if="errmsgs[3] === false" version="1.1" id="Layer_1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                 viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
@@ -96,7 +113,7 @@
 
 <script setup lang = "ts">
     import { onUpdated, ref } from 'vue';
-    //import pwned from '../composables/pwned.ts'
+    import pwned from '../composables/pwned.ts'
 
     const option = ref(true)
     const creds = ref(['', '', '']) /* username, password, confirm password */
@@ -108,6 +125,7 @@
         number: false,
         special: false
     })
+    const found = ref(false)
 
     const chgopt =()=> {
         for (let i = 0; i < errmsgs.value.length; i++) errmsgs.value[i] = undefined
@@ -117,32 +135,33 @@
         if (!option.value) {
             if (creds.value[0] + creds.value[1] === 'antonio123abCD@') {
                 alert('Login succeded')
-                // enviar para home page
+                // Send to home page
             } else {
                 errmsgs.value[0] = true
             }
         } else {
-            
+            alert(`
+            Username: ${creds.value[0]}\n
+            Password; ${creds.value[1]}
+            `)
+            // Send to home page
         }
     }
-    const chkcreds =(e: any, field: any)=> {
-        if (option.value) {
-            //console.info(e.target.validity)
-            if (!field) {
-                // confirm password
-                return
-            }
+    const chkcreds =(e: any, field: number)=> {
+        if (option.value) {  
             if (!creds.value[field].length) errmsgs.value[field + 1] = undefined
-            else errmsgs.value[field + 1] = !e.target.validity.valid           
+            else {
+                if (field !== 2) errmsgs.value[field + 1] = !e.target.validity.valid
+                else errmsgs.value[3] = (creds.value[1] !== creds.value[2])
+            }
         }
     }
     const blocksp =(e: any)=> {
         if (e.code === 'Space') e.preventDefault()
     }
-    const barmeter =()=> {
+    const pwrdscore =()=> {
         let score: number = 0
         let reqs = pwrdchks.value
-        const dumb: string[] = ['abc', 'qwerty', 'password', 'admin', 'user', 'brasil', '102030']
         const unique =()=> {
             const chars: string[] = creds.value[1].split("")
             if (!chars.length) return false
@@ -172,18 +191,27 @@
         score += creds.value[1].length * 2
         if (reqs.length > 12) score += 4
         if (reqs.length === 16) score += 4
-        if (dumb.includes(creds.value[1])) score -= 15
+        if (found.value) score -= 15
         if (unique()) score += 4
         if (charseq()) score -= 10
         if (numseq()) score -= 10
-        console.log(score, reqs)
 
-        return (score > 0) ? score * 1.67 : 0
+        return (score > 0) ? score * (10 / 6) : 0
+    }
+    const strlabel =()=> {
+        let score: number = Math.ceil(pwrdscore() / 20)
+        const labels: string[] = ["Very Weak", "Weak", "Medium", "Good", "Strong"]
+        return labels[score - 1]
+    }
+    const strhue =()=> {
+        let score: number = Math.ceil(pwrdscore() / 20)
+        const hues: string[] = ['f00', 'f50', 'ff0', 'af0', '0f0']
+        return '#' + hues[score - 1]
     }
 
     onUpdated(() => {
         let chk = (creds.value[0].length && creds.value[1].length)
-        if (option.value) chk &= creds.value[2].length
+        if (option.value) chk &= (creds.value[2].length)
         dis.value = !chk
 
         const patterns: RegExp[] = [/[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/]
@@ -194,6 +222,8 @@
             if (k === 'length') reqs[k] = creds.value[1].length >= 8
             else reqs[k] = patterns[i++].test(creds.value[1])
         }
+
+        found.value = (pwned.includes(creds.value[1]))
     })
 </script>
 
