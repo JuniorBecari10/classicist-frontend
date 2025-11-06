@@ -32,7 +32,7 @@
 
 <template>
     <div class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
-        <h1 class="mt-6 ml-6 text-[32px] font-bold">Welcome back, Antônio!</h1>
+        <h1 class="mt-6 ml-6 text-[32px] font-bold">Good to see you, Antônio!</h1>
 
         <p class="ml-6 mt-4 text-[15px]">Recommended for you</p>
         <div class="flex pl-4 mt-4 gap-2 overflow-auto">

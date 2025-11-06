@@ -35,6 +35,10 @@ export function formatTitleDisplayKey(title: WorkTitle, note: Note, mode: KeyMod
     return `${formatTitleDisplayNoNick(title)} in ${formatKey(note, mode)}${formatNick(title.nickname)}`;
 }
 
+export function formatKey(note: Note, mode: KeyMode) {
+    return `${formatNote(note)} ${formatMode(mode)}`;
+}
+
 // ---
 
 function formatTitleDisplayNoNick(title: WorkTitle): string {
@@ -51,10 +55,6 @@ function formatNick(nickname: Option<string>) {
             ? `: "${nickname}"`
             : ""
     }`;
-}
-
-function formatKey(note: Note, mode: KeyMode) {
-    return `${formatNote(note)} ${formatMode(mode)}`;
 }
 
 function formatNote(note: Note) {
