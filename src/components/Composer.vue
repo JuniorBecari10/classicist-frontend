@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import Works from './Works.vue'
-import About from './About.vue'
-</script>
-
 <template>
     <section class="font-fredoka select-none">
         <div class="bg-[url('./src/resources/Amadeus.jpg')] h-60 bg-[center_-40rem] bg-fixed">
@@ -22,3 +17,8 @@ import About from './About.vue'
         </section>
     </section>
 </template>
+
+<script setup lang="ts">
+    import Works from './Works.vue'
+    import About from './About.vue'
+</script>
