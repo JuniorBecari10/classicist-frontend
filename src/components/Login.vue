@@ -27,7 +27,7 @@
                             :maxlength="option ? '16' : ''" 
                             :pattern="option ? '[a-zA-Z0-9]+' : '.*'">
 
-                        <svg class="absolute right-10" v-if="errmsgs[1] === false" version="1.1" id="Layer_1"
+                        <svg class="absolute right-10" v-if="errmsgs[1] === false && option" version="1.1" id="Layer_1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
                             <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
@@ -36,14 +36,14 @@
                         </svg>
                     </div>
 
-                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[1]">
+                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[1] && option">
                         Username must have more than 3 characters.
                     </span>
 
                     <!-- Password field -->
                     <div class="flex items-center">
                         <div class="bg-gray-700 rounded-[12px] w-full overflow-hidden relative transition-[padding]" 
-                            :class="`pb-${(creds[1].length && option) ? '1.25' : '0'}`">
+                            :class="(creds[1].length && option) ? 'pb-1.5' : ''">
 
                             <div class="flex items-center">
                                 <input type="password" placeholder="Password" v-model="creds[1]" @input="chkcreds($event, 1)"
@@ -59,7 +59,7 @@
                             </div>
                         </div>
 
-                        <svg class="absolute right-10" v-if="errmsgs[2] === false" version="1.1" id="Layer_1"
+                        <svg class="absolute right-10" v-if="errmsgs[2] === false && option" version="1.1" id="Layer_1"
                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                             viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
                             <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
@@ -68,16 +68,15 @@
                         </svg>
                     </div>                    
                     
-                    <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[80%] leading-5.5 transition-color duration-300" 
-                        v-if="creds[1].length && option" :style="{color: strhue()}">
-                            {{strlabel()}}
+                    <span class="w-full max-w-[495px] -mt-4 -mb-0 -ml-12.75 font-fredoka text-left text-[80%] leading-5.5 transition-color duration-300" v-if="creds[1].length && option" :style="{color: strhue()}">
+                        {{strlabel()}}
                     </span>
                     
-                    <span class="w-full max-w-[495px] -mt-10 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="option && found">
+                    <span class="w-full max-w-[495px] -mt-3 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="option && found">
                         This password was found on a database of known hacked passwords.
                     </span>
                     
-                    <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="errmsgs[2]">
+                    <span class="w-full max-w-[495px] -mt-4 -ml-12.75 font-fredoka text-left text-[#e11] text-[80%] leading-5.5" v-if="errmsgs[2] && option">
                         Password must have at least have 8 characters including lower and uppercase, numbers and special ones.
                     </span>
 
@@ -85,8 +84,8 @@
                     <section class="overflow-hidden transition-all transition-discrete delay-0 duration-1000 ease-linear" 
                     :class="option ? 'max-h-[500px]' : 'max-h-0'"> <!-- Arrumar espaçamento extra -->
                         <div class="flex items-center">                            
-                            <input type="password" placeholder="Confirm Password" v-model="creds[2]" @input="chkcreds(null, 2)" class="outline-none">
-                            <svg class="absolute right-10" v-if="errmsgs[3] === false" version="1.1" id="Layer_1"
+                            <input type="password" placeholder="Confirm Password" v-model="creds[2]" @input="chkcreds(null, 2)" class="outline-none" maxlength="16">
+                            <svg class="absolute right-10" v-if="errmsgs[3] === false && option" version="1.1" id="Layer_1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                 viewBox="0 0 24 24" xml:space="preserve" height="30" width="30">
                                 <path d="M19.3,5.3L9,15.6l-4.3-4.3l-1.4,1.4l5,5L9,18.4l0.7-0.7l11-11L19.3,5.3z"
@@ -96,11 +95,12 @@
                         </div>
                     </section>
 
-                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[3]">
+                    <span class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]" 
+                        v-if="errmsgs[3] && creds[1].length && creds[2].length && option">
                         Passwords don't match.
                     </span>
 
-                    <span class="w-full -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[0]">
+                    <span class="w-full -mt-10 ml-1 font-fredoka text-left text-[#e11] text-[80%]" v-if="errmsgs[0] && !option">
                         Incorrect username or password.
                     </span>
                 </section>
@@ -115,7 +115,7 @@
     import { onUpdated, ref } from 'vue';
     import pwned from '../composables/pwned.ts'
 
-    const option = ref(true)
+    const option = ref(false)
     const creds = ref(['', '', '']) /* username, password, confirm password */
     const dis = ref(true)
     const errmsgs: any = ref([undefined, undefined, undefined, undefined]) /* login failed, user reqs, pwrd reqs, pwrds dont match */
@@ -128,12 +128,13 @@
     const found = ref(false)
 
     const chgopt =()=> {
-        for (let i = 0; i < errmsgs.value.length; i++) errmsgs.value[i] = undefined
+        errmsgs.value[0] = undefined
+        for (let i = 1; i < errmsgs.value.length; i++) if (!creds.value[i - 1]) errmsgs.value[i] = undefined
         option.value = !option.value
     }
     const loghdl =()=> {
         if (!option.value) {
-            if (creds.value[0] + creds.value[1] === 'antonio123abCD@') {
+            if (creds.value[0] + creds.value[1] === 'antonioClass!C25') {
                 alert('Login succeded')
                 // Send to home page
             } else {
@@ -147,12 +148,18 @@
             // Send to home page
         }
     }
+
     const chkcreds =(e: any, field: number)=> {
-        if (option.value) {  
-            if (!creds.value[field].length) errmsgs.value[field + 1] = undefined
-            else {
-                if (field !== 2) errmsgs.value[field + 1] = !e.target.validity.valid
-                else errmsgs.value[3] = (creds.value[1] !== creds.value[2])
+        if (!creds.value[field].length) errmsgs.value[field + 1] = undefined
+        else {
+            switch (field) {
+                case 0:
+                    errmsgs.value[1] = !e.target.validity.valid; break
+                case 1:
+                    errmsgs.value[2] = !e.target.validity.valid
+                    errmsgs.value[3] = (creds.value[1] !== creds.value[2]); break
+                case 2:
+                    errmsgs.value[3] = (creds.value[1] !== creds.value[2])
             }
         }
     }
@@ -199,9 +206,10 @@
         return (score > 0) ? score * (10 / 6) : 0
     }
     const strlabel =()=> {
-        let score: number = Math.ceil(pwrdscore() / 20)
+        let score: number = Math.floor(pwrdscore() / 20)
         const labels: string[] = ["Very Weak", "Weak", "Medium", "Good", "Strong"]
-        return labels[score - 1]
+        if (score === 5) return "Almighty"
+        else return labels[score]
     }
     const strhue =()=> {
         let score: number = Math.ceil(pwrdscore() / 20)
@@ -210,9 +218,12 @@
     }
 
     onUpdated(() => {
-        let chk = (creds.value[0].length && creds.value[1].length)
-        if (option.value) chk &= (creds.value[2].length)
-        dis.value = !chk
+        let chk: boolean = Boolean(creds.value[0].length && creds.value[1].length)
+        if (option.value) {
+            chk &&= Boolean(creds.value[2].length)
+            for (let i = 1; i < errmsgs.value.length; i++) chk &&= (errmsgs.value[i] === false)
+        }
+        dis.value = !Boolean(chk)
 
         const patterns: RegExp[] = [/[A-Z]/, /[0-9]/, /[^A-Za-z0-9]/]
         let reqs = pwrdchks.value
@@ -224,6 +235,8 @@
         }
 
         found.value = (pwned.includes(creds.value[1]))
+        console.clear()
+        console.log(errmsgs.value)
     })
 </script>
 
