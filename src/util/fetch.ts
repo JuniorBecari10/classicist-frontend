@@ -2,6 +2,7 @@ import type { Work } from "@/model/work.ts";
 import type { Recording } from "@/model/recording.ts";
 import { BACKEND_URL } from "./consts.ts";
 import { ref, onMounted } from "vue";
+import type { SearchResult } from "@/model/search.ts";
 
 export async function getWork(id: number): Promise<Work> {
     const res = await fetch(`${BACKEND_URL}/api/work?id=${id}`);
@@ -23,7 +24,7 @@ export async function getRecsForWork(id: number): Promise<Recording[]> {
     return res.json();
 }
 
-export async function search(query: string): Promise<Recording[]> {
+export async function search(query: string): Promise<SearchResult[]> {
     const res = await fetch(`${BACKEND_URL}/api/search?q=${query}`);
 
     if (!res.ok) {
