@@ -6,6 +6,6 @@ import Workpage from "./components/Workpage.vue";
 
 <template>
     <!-- <Composer></Composer> -->
-    <Login></Login>
-    <!-- <Workpage></Workpage> -->
+    <!-- <Login></Login> -->
+    <Workpage></Workpage>
 </template>
