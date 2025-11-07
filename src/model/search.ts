@@ -3,21 +3,19 @@ import type { Composer, Work } from "./work";
 
 export type SearchItem = Work | Composer | Performer;
 
-// Tagged union for SearchResult
 export type SearchResult =
-    | { type: "work"; data: Work }
-    | { type: "composer"; data: Composer }
-    | { type: "performer"; data: Performer };
+    | { type: "work"; value: Work }
+    | { type: "composer"; value: Composer }
+    | { type: "performer"; value: Performer };
 
-// Constructors (like your NewWorkSR etc.)
 export function newWorkSR(w: Work): SearchResult {
-    return { type: "work", data: w };
+    return { type: "work", value: w };
 }
 
 export function newComposerSR(c: Composer): SearchResult {
-    return { type: "composer", data: c };
+    return { type: "composer", value: c };
 }
 
 export function newPerformerSR(p: Performer): SearchResult {
-    return { type: "performer", data: p };
+    return { type: "performer", value: p };
 }

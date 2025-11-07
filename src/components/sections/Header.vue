@@ -1,20 +1,43 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { ref, computed, watchEffect } from "vue";
     import SearchBar from "../util/SearchBar.vue";
+    import SearchResult from "../util/SearchResult.vue";
+    import { search, useFetch } from "@/util/fetch.ts";
 
-    const search = ref("");
+    // TODO: recent searches
+
+    const searchText = ref("");
+    const visible = ref(false);
+    const query = computed(() => searchText.value.trim());
+
+    const { data: results, loading: loading, error: error, reload } =
+        useFetch(() => search(query.value));
+
+    watchEffect(() => {
+        reload();
+    });
+
+    function clear() {
+        searchText.value = "";
+        visible.value = false;
+        results.value = [];
+    }
+
+    function searchClick() {
+        setTimeout(clear, 300);
+    }
 </script>
 
 <template>
     <header class="flex items-center justify-center m-4 h-10">
-        <a href="/" v-ripple>
+        <a href v-ripple>
             <img src="@/assets/images/logo.png" />
         </a>
         
         <div class="flex-1"></div>
 
         <div class="w-80 h-10 flex">
-            <SearchBar v-model="search">Search</SearchBar>
+            <SearchBar v-model="searchText" v-model:visible="visible" :blur="clear">Search</SearchBar>
         </div>
 
         <div class="flex-1"></div>
@@ -23,4 +46,22 @@
             <div class="bg-[#85E014] size-10 text-lg rounded-full text-white font-bold flex items-center justify-center">A</div>
         </div>
     </header>
+
+    <div v-show="visible"
+        class="absolute left-1/2 top-17 -translate-x-1/2 bg-fg-lighter shadow-xl w-100 max-h-100 min-h-15 z-50 rounded-lg py-2 overflow-auto">
+
+        <div v-if="loading"></div>
+
+        <div v-else-if="results.length === 0 && query.length > 0" class="w-full h-15 flex flex-col items-center justify-center">
+            <p class="text-[1.15rem] font-semibold font-fredoka">No results found.</p>
+            <p class="text-sm text-fgray font-fredoka">Please try a different search term.</p>
+        </div>
+        
+        <div v-else-if="results.length === 0" class="w-full h-15 flex flex-col items-center justify-center">
+            <p class="text-[1.15rem] font-semibold font-fredoka">Type to search!</p>
+            <p class="text-sm text-fgray font-fredoka">Your results will appear here.</p>
+        </div>
+
+        <SearchResult v-else v-for="res in results" :action="searchClick" :item="res" />
+    </div>
 </template>
