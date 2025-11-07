@@ -141,7 +141,7 @@
 
             <div v-if="store.list.length === 0" class="flex flex-col items-center justify-center w-full h-[80%]">
                 <img src="@/assets/images/note.png" />
-                <p class="text-[1.15rem] font-semibold font-fredoka">The library is empty!</p>
+                <p class="text-[1.15rem] font-semibold font-fredoka">Your library is empty!</p>
                 <p class="text-sm text-fgray font-fredoka">Add some items here for easier access.</p>
             </div>
         </div>
