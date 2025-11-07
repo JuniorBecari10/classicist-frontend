@@ -17,7 +17,17 @@ export async function getRecsForWork(id: number): Promise<Recording[]> {
     const res = await fetch(`${BACKEND_URL}/api/recsforwork?id=${id}`);
 
     if (!res.ok) {
-        throw new Error(`Failed to fetch work (${res.status} ${res.statusText})`);
+        throw new Error(`Failed to fetch recordings (${res.status} ${res.statusText})`);
+    }
+
+    return res.json();
+}
+
+export async function search(query: string): Promise<Recording[]> {
+    const res = await fetch(`${BACKEND_URL}/api/search?q=${query}`);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch search results (${res.status} ${res.statusText})`);
     }
 
     return res.json();
