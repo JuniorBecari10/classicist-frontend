@@ -41,9 +41,8 @@
         </div>
       </div>
       <p class="text-[24px] font-oldstd  text-center mt-40">What are you waiting for?</p>
-
-      <a  class="text-[20px] box-conten bg-white px-10 pt-3 pb-3 rounded-md text-black font-oldstd mt-25">Listen now</a>
     </div>
+    <a  class="text-[20px] box-conten bg-white px-10 pt-3 pb-3 rounded-md text-black font-oldstd mt-25">Listen now</a>
   </div>
   
 </template>
