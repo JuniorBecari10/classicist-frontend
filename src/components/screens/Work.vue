@@ -1,25 +1,36 @@
+<script setup lang="ts">
+    import { ref } from "vue";
+    import { formatTitleDisplayKey, formatCatalog, formatCompositionYear } from "@/util/format.ts";
+    
+    const props = defineProps<{
+        work: Work;
+    }>();
+
+    let aboutexp = ref(0)
+    let musplay = ref(0)
+    let orch = ref('Krystian Zimerman ― 1988')
+</script>
+
 <template>
-    <section class="bg-[#252525] font-fredoka select-none w-screen h-screen">
+    <section class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
         <!-- Header -->
         <div class="bg-[url('./src/resources/musik.png')] h-50 bg-[center_-40rem] bg-cover bg-fixed">
             <div class="h-1/1 bg-gradient-to-t from-[#252525] to-transparent">
-                <div class="pt-5 pl-8 pt-0">
-                    <p class="font-semibold text-[3rem]">Ballade No. 1 in G Minor</p>
-                    <p class="font-light text-[1.5rem] text-gray-300">Fréderic Chopin</p>
-                    <p class="font-light text-[1.5rem] text-gray-300">Op. 23 • 1835 • 9 min</p>
+                <div class="pt-5 pl-8">
+                    <p class="font-semibold text-4xl mb-2">{{ formatTitleDisplayKey(props.work.title, props.work.key.note, props.work.key.mode) }}</p>
+                    <p class="text-xl text-fgray">{{ props.work.composer.name }}</p>
+                    <p class="text-xl text-fgray">{{ formatCatalog(props.work.catalog) }} • {{ formatCompositionYear(props.work.year) }}</p>
                 </div>
             </div>
         </div>
 
         <!-- Play button & Orchestra -->
-        <div class="ml-8 -mt-5 mb-6 flex items-center gap-4">
-            <div class="rounded-full size-[55px] flex justify-center items-center gap-2 
-            cursor-pointer" 
-            @click="musplay ^= 1">
+        <div class="ml-6 -mt-12 mb-6 flex items-center gap-4">
+            <div class="rounded-full size-[55px] flex justify-center items-center gap-2 cursor-pointer"
+            @click="musplay ^= 1" v-ripple>
                 <div class="relative bg-[#18A0E4] rounded-full size-full text-[12px] flex justify-center items-center hover:bg-[#42aee4] play transition-[background] duration-400" :class="{pause : musplay}"></div>
             </div>
-            <select class="rounded-full bg-[#4c4c4c] h-10 w-[270px] px-4 flex items-center font-light text-[16px] 
-            transition-all duration-400 focus:bg-[#5c5c5c] hover:bg-[#5c5c5c]" v-model="orch">
+            <select class="rounded-full bg-fg-lighter h-10 w-[270px] pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter" v-model="orch">
                 <option>Krystian Zimerman ― 1988</option>
                 <option>Hans Zimmer ― 2017</option>
                 <option>Herbert Richers ― 1989</option>
@@ -65,14 +76,6 @@
         </section>
     </section>
 </template>
-
-<script setup lang="ts">
-    import { ref } from 'vue';
-
-    let aboutexp = ref(0)
-    let musplay = ref(0)
-    let orch = ref('Krystian Zimerman ― 1988')
-</script>
 
 <style>
     .play:before {

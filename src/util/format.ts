@@ -1,5 +1,7 @@
-import { type Composer, type DisplayWork, type WorkTitle, type TempoMarking, type Option, KeyMode, Note } from "@/model/work.ts";
+import type { Composer, DisplayWork, WorkTitle, TempoMarking, Catalog, Option, CompositionYear } from "@/model/work.ts";
 import type { Performer } from "@/model/recording.ts";
+
+import { KeyMode, Note } from "@/model/work.ts";
 import { convertDuration, type Time } from "./time.ts";
 
 export function formatDisplayWork(dw: DisplayWork): string {
@@ -37,6 +39,26 @@ export function formatTitleDisplayKey(title: WorkTitle, note: Note, mode: KeyMod
 
 export function formatKey(note: Note, mode: KeyMode) {
     return `${formatNote(note)} ${formatMode(mode)}`;
+}
+
+export function formatCatalog(c: Catalog) {
+    return `${c.prefix}${
+        c.number
+            ? ` ${c.number}`
+            : ""
+    }${
+        c.subnumber
+            ? `, No. ${c.subnumber}`
+            : ""
+    }`;
+}
+
+export function formatCompositionYear(y: CompositionYear) {
+    return `${y.start_year}${
+        y.end_year
+            ? ` ― ${y.end_year}`
+            : ""
+    }`;
 }
 
 // ---
