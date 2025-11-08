@@ -50,7 +50,7 @@
         </div>
     </div>
 
-    <Work v-if="center.isWork()" :work="center.screen.value" />
+    <Work v-if="center.isWork()" :work="center.screen.value" :id="center.screen.recId" />
     <div v-if="center.isComposer()">composer todo {{ center.screen.value }}</div>
     <div v-if="center.isPerformer()">performer todo {{ center.screen.value }}</div>
 </template>

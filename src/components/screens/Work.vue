@@ -1,21 +1,48 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { ref, computed } from "vue";
     import { formatTitleDisplayKey, formatCatalog, formatCompositionYear } from "@/util/format.ts";
+    import { getRecsForWork, useFetch } from "@/util/fetch.ts";
+    import { BACKEND_URL } from "@/util/consts.ts";
     
     const props = defineProps<{
         work: Work;
+        recId?: number;
     }>();
 
-    let aboutexp = ref(0)
-    let musplay = ref(0)
-    let orch = ref('Krystian Zimerman ― 1988')
+    const selectedRecId = ref(props.recId ? props.recId : -1);
+
+    const { data: recs, loading: loading, error: error } =
+        useFetch(() => getRecsForWork(props.work.id));
+    
+    const recData = computed(() => {
+        if (!recs.value || recs.value.length === 0)
+            return null;
+
+        if (selectedRecId.value < 0)
+            selectedRecId.value = recs.value[0].id;
+
+        const rec = recs.value.filter(rec => rec.id === selectedRecId.value)[0];
+
+        return {
+            perfs: rec.performers?.map(p => p.performer) ?? [],
+            imagePath: `${BACKEND_URL}/public/images/covers/${rec.photo_path}`,
+        };
+    });
+
+    let aboutexp = ref(0);
+    let musplay = ref(0);
 </script>
 
 <template>
-    <section class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
+    <div v-if="loading" class="flex-1 bg-fg rounded-xl overflow-y-auto h-full aniate-pulse"></div>
+    <div v-else-if="error" class="flex-1 bg-red-300 rounded-xl overflow-y-auto h-full aniate-pulse"></div>
+
+    <section v-else class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
         <!-- Header -->
-        <div class="bg-[url('./src/resources/musik.png')] h-50 bg-[center_-40rem] bg-cover bg-fixed">
-            <div class="h-1/1 bg-gradient-to-t from-[#252525] to-transparent">
+            <div
+              class="h-50 bg-cover bg-center bg-fixed"
+              :style="{ backgroundImage: `url('${recData.imagePath}')` }">
+            <div class="h-full bg-gradient-to-t from-fg to-black/30">
                 <div class="pt-5 pl-8">
                     <p class="font-semibold text-4xl mb-2">{{ formatTitleDisplayKey(props.work.title, props.work.key.note, props.work.key.mode) }}</p>
                     <p class="text-xl text-fgray">{{ props.work.composer.name }}</p>
@@ -30,10 +57,12 @@
             @click="musplay ^= 1" v-ripple>
                 <div class="relative bg-[#18A0E4] rounded-full size-full text-[12px] flex justify-center items-center hover:bg-[#42aee4] play transition-[background] duration-400" :class="{pause : musplay}"></div>
             </div>
-            <select class="rounded-full bg-fg-lighter h-10 w-[270px] pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter" v-model="orch">
-                <option>Krystian Zimerman ― 1988</option>
-                <option>Hans Zimmer ― 2017</option>
-                <option>Herbert Richers ― 1989</option>
+            <select
+                class="rounded-full bg-fg-lighter h-10 max-w-1/2 pr-5 pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter truncate"
+                v-model="selectedRecId">
+                    <option v-for="rec in recs" :key="rec.id" :value="rec.id">
+                        {{ rec.performers.map(p => p.performer.name).join(", ") }} ― {{ rec.year }}
+                    </option>
             </select>
         </div>
 

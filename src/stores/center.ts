@@ -5,7 +5,7 @@ import type { Performer } from "@/model/recording";
 import type { LibraryItem } from "@/stores/library";
 
 export type CenterScreen =
-    | { type: "work"; value: Work }
+    | { type: "work"; value: Work, recId?: number }
     | { type: "composer"; value: Composer }
     | { type: "performer"; value: Performer }
     | { type: "home" };
@@ -23,10 +23,11 @@ export const useCenterStore = defineStore("center", () => {
         screen.value = l as CenterScreen;
     }
 
-    function work(w: Work) {
+    function work(w: Work, recId?: number) {
         screen.value = {
             type: "work",
             value: w,
+            recId: recId,
         };
     }
 

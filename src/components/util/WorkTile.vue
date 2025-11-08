@@ -32,11 +32,12 @@
         return {
             perfs: rec.performers?.map(p => p.performer) ?? [],
             imagePath: `${BACKEND_URL}/public/images/covers/${rec.photo_path}`,
+            id: rec.id,
         };
     });
 
     function click() {
-        center.work(work);
+        center.work(work, recData.id);
     }
 </script>
 
