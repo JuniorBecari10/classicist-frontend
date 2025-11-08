@@ -12,10 +12,6 @@
 
     const store = usePlayerStore();
 
-    const composer = { name: 'Ludwig van Beethoven' };
-
-    const composer = { name: 'Ludwig van Beethoven' };
-
     const audio = ref<HTMLAudioElement | null>(null);
     const isPlaying = ref(false);
 
