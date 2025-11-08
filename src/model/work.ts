@@ -44,7 +44,7 @@ export interface Composer {
     photo_path: string;
 }
 
-interface Catalog {
+export interface Catalog {
     prefix: string;
     number: Option<string>;
     subnumber: Option<string>;
@@ -67,7 +67,7 @@ export interface Movement {
     sheet: SheetMusic;
 }
 
-interface CompositionYear {
+export interface CompositionYear {
     start_year: number;
     end_year: Option<number>;
 }

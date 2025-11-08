@@ -42,7 +42,7 @@ onUnmounted(() => {
     <div ref="container" class="flex flex-1 w-full h-full overflow-hidden">
         <!-- Left panel -->
         <div
-            class="flex-shrink-0 min-w-1/6 max-w-2/3"
+            class="flex-shrink-0 min-w-1/5 max-w-2/3"
             :style="{ width: `${leftWidth}%` }"
         >
             <slot name="left" />
