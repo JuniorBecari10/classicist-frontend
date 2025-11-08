@@ -13,7 +13,11 @@ export function formatDisplayWorkKey(dw: DisplayWork, note: Note, mode: KeyMode)
 }
 
 export function formatDisplayAuthors(composer: Composer, performers: Performer[]): string {
-    return `${composer.name} | ${performers.map(p => p.name).join(", ")}`;
+    return `${composer.name} | ${joinPerformers(performers)}`;
+}
+
+export function joinPerformers(performers: Performer[]): string {
+    return performers.map(p => p.name).join(", ");
 }
 
 export function formatTime(t: Time): string {
@@ -61,6 +65,12 @@ export function formatCompositionYear(y: CompositionYear) {
     }`;
 }
 
+export function joinTempoMarkings(tempos: TempoMarking[]): string {
+    return tempos
+        .map(formatTempoMarking)
+        .join(" ― ");
+}
+
 // ---
 
 function formatTitleDisplayNoNick(title: WorkTitle): string {
@@ -106,12 +116,6 @@ function formatMode(mode: KeyMode) {
         case KeyMode.Major: return "major";
         case KeyMode.Minor: return "minor";
     }
-}
-
-function joinTempoMarkings(tempos: TempoMarking[]): string {
-    return tempos
-        .map(formatTempoMarking)
-        .join(" ― ");
 }
 
 function formatTempoMarking(tempo: TempoMarking): string {
