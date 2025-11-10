@@ -2,9 +2,9 @@
     import { ref } from "vue";
     import RecordingSelect from "../util/RecordingSelect.vue";
 
+    const selectedId = defineModel<number | null>({ default: null });
     const props = defineProps<{
         recs: Recording[];
-        perfs: Performer[];
     }>();
 
     const paused = ref(false);
@@ -19,7 +19,7 @@
             />
         </div>
 
-        <RecordingSelect :recs="props.recs" :perfs="props.perfs" />
+        <RecordingSelect :recs="props.recs" v-model="selectedId" />
     </div>
 </template>
 

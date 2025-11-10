@@ -4,10 +4,9 @@
 
     const props = defineProps<{
         recs: Recording[];
-        perfs: Performer[];
     }>();
 
-    const selectedId = defineModel<number | null>("selectedId", { default: null });
+    const selectedId = defineModel<number | null>({ default: null });
     
     onMounted(() => {
         if (!selectedId.value && props.recs.length > 0)
@@ -20,7 +19,7 @@
         class="rounded-full bg-fg-lighter h-10 max-w-1/2 pr-5 pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter truncate"
         v-model="selectedId">
             <option v-for="rec in props.recs" :key="rec.id" :value="rec.id">
-                {{ joinPerformers(props.perfs) }} ― {{ rec.year }}
+                {{ joinPerformers(rec.performers.map(p => p.performer)) }} ― {{ rec.year }}
             </option>
     </select>
 </template>

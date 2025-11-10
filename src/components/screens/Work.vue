@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, computed } from "vue";
+    import { ref, computed, watchEffect } from "vue";
     import { getRecsForWork, useFetch } from "@/util/fetch.ts";
     import { joinTempoMarkings } from "@/util/format.ts";
     import { BACKEND_URL } from "@/util/consts.ts";
@@ -32,7 +32,6 @@
         };
     });
 
-
     let aboutexp = ref(0);
 </script>
 
@@ -42,7 +41,7 @@
 
     <section v-else class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
         <WorkHeader :work="props.work" :imagePath="recData.imagePath" />
-        <WorkControls :recs="recs" :perfs="recs.map(rec => rec.performers)" />
+        <WorkControls :recs="recs" v-model="selectedRecId" />
 
         <!-- Movements & About -->
         <section class="w-full grid grid-cols-1 justify-items-center gap-8 px-4">
