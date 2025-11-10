@@ -88,4 +88,6 @@ export interface DisplayWork {
     title: WorkTitle;
     tempos: TempoMarking[];
     movementNumber: number;
+    form: Option<string>;
+    nickname: Option<string>;
 }

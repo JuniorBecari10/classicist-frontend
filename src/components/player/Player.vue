@@ -16,17 +16,23 @@
     const rec = computed(() => store.currentRecording);
     const movement = computed(() => store.currentMovement);
 
-    const { data: work, loading, error } = useFetch(() => {
+    const { data: work, loading, error, reload } = useFetch(() => {
         if (!rec.value?.work_id)
             return null;
         
         return getWork(rec.value.work_id);
     });
 
+    watchEffect(() => {
+        const key = JSON.stringify(store.queue.map(r => r.id));
+        if (rec.value?.work_id)
+            reload();
+    });
+
     const displayWork = computed(() => {
         if (!work.value)
             return null;
-        
+
         const movementNum = store.currentMovementIndex + 1;
         return workToDisplayWork(work.value, movementNum);
     });

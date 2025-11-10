@@ -5,7 +5,15 @@ import { KeyMode, Note } from "@/model/work.ts";
 import { convertDuration, type Time } from "./time.ts";
 
 export function formatDisplayWork(dw: DisplayWork): string {
-    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${joinTempoMarkings(dw.tempos)}`
+    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${
+        dw.form
+            ? `${dw.form}: `
+            : ""
+    } ${joinTempoMarkings(dw.tempos)}${
+        dw.nickname
+            ? ` • "${dw.nickname}"`
+            : ""
+    }`;
 }
 
 export function formatDisplayWorkKey(dw: DisplayWork, note: Note, mode: KeyMode): string {
