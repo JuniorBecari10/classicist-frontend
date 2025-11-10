@@ -1,6 +1,23 @@
+<script setup lang="ts">
+    import LandingCard from "../components/util/LandingCard.vue";
+
+    import eighth from "@/assets/images/eighth.png";
+    import glass from "@/assets/images/glass.png";
+    import treble from "@/assets/images/treble.png";
+</script>
+
 <template>
-    <div class="relative h-110 bg-cover bg-center bg-[url('./src/assets/gif/orchestra.gif')]">
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black"></div>
+    <div class="relative h-[440px] overflow-hidden">
+        <!-- Fixed image with its own gradient -->
+        <div
+            class="absolute inset-0 bg-cover bg-center bg-fixed"
+            style="background-image: url('./src/assets/gif/orchestra.gif')">
+            <!-- Gradient tied to the image -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black via-black/20 to-transparent"></div>
+        </div>
+
+        <!-- Scrolling gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none"></div>
     </div>
 
     <header class="fixed top-3 flex justify-between items-center">
@@ -39,42 +56,30 @@
 
     <section id="infos" class="w-full mt-[350px] flex flex-col items-center text-center">
         <div class="flex items-center justify-center my-20">
-            <div class="bg-white h-1 w-110"></div>
+            <div class="bg-white h-1 w-90"></div>
             <p class="text-[24px] w-[50%] !font-oldstd mx-5">What makes Classicist great?</p>
-            <div class="bg-white h-1 w-110"></div>
+            <div class="bg-white h-1 w-90"></div>
         </div>
 
-        <div class="flex items-center justify-center mt-40">
-            <img src="@/assets/images/eighth.png" class="size-[170px] mb-35 mr-15" alt="Musical note" />
-            <div class="text-left">
-                <h2 class="text-[48px] !font-oldstd w-90 leading-none">Structural redefinement.</h2>
-                <p class="text-[24px] !font-oldstd w-130 mt-5">
-                    Classicist redefines what classical music streaming is, presenting it the historically and musically correct way.
-                </p>
-            </div>
-        </div>
+        <LandingCard
+            :image="eighth"
+            title="Structural redefinement."
+            description="Classicist redefines what classical music streaming is, with the historically and musically correct way to present them."
+        />
 
-        <div class="flex items-center justify-center mt-20">
-            <img src="@/assets/images/glass.png" class="size-[170px] mb-25 mr-15" alt="Magnifying glass" />
-            <div class="text-left">
-                <h2 class="text-[48px] !font-oldstd w-100 leading-none">Musically accurate search engine.</h2>
-                <p class="text-[24px] !font-oldstd w-130 mt-5">
-                    Classicist includes a powerful search engine specifically focused on musical form and key.
-                </p>
-            </div>
-        </div>
+        <LandingCard
+            :image="glass"
+            title="Musically accurate search engine."
+            description="Classicist includes a powerful search engine specifically focused on musical form and key."
+        />
 
-        <div class="flex items-center justify-center mt-20">
-            <img src="@/assets/images/treble.png" class="size-[170px] mb-40 mr-15" alt="Treble clef" />
-            <div class="text-left">
-                <h2 class="text-[48px] !font-oldstd w-110 leading-none">First-class sheet music visualization.</h2>
-                <p class="text-[24px] !font-oldstd w-125 mt-5">
-                    Classicist allows users to view sheet music for every piece, enabling musical analysis and appreciation.
-                </p>
-            </div>
-        </div>
+        <LandingCard
+            :image="treble"
+            title="First-class sheet music visualization."
+            description="Classicist allows users to view sheet music for every piece, enabling musical analysis and appreciation."
+        />
 
-        <p class="text-[24px] !font-oldstd text-center mt-40">
+        <p class="text-[24px] !font-oldstd text-center mt-30">
             What are you waiting for?
         </p>
 
@@ -84,7 +89,7 @@
     </section>
 
     <!-- Footer (optional placeholder for later expansion) -->
-    <footer class="mt-40 w-full flex flex-col justify-center items-center h-50">
+    <footer class="mt-30 w-full flex flex-col justify-center items-center h-50">
         <img src="@/assets/images/logo.png" alt="Classicist logo" />
         <p class="!font-oldstd mt-8 text-lg">Copyright © 2025 Classicist. All rights reserved.</p>
     </footer>
