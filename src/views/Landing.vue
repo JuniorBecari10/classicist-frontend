@@ -9,10 +9,10 @@
         </a>
 
         <nav class="fixed top-8 right-10 flex space-x-5">
-            <a class="box-content bg-transparent px-3 py-2 rounded-md !font-oldstd cursor-pointer">
+            <a href="/login" class="box-content bg-transparent px-3 py-2 rounded-md !font-oldstd cursor-pointer">
                 Login
             </a>
-            <a class="box-content bg-white px-3 py-2 rounded-md text-black !font-oldstd cursor-pointer">
+            <a href="/login" class="box-content bg-white px-3 py-2 rounded-md text-black !font-oldstd cursor-pointer">
                 Sign Up
             </a>
         </nav>
