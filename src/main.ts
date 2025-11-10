@@ -1,12 +1,14 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { ripple } from "./directives/ripple";
+import { router } from "./router";
 
 import "./assets/css/index.css";
-import App from "./App.vue";
+import Root from "./Root.vue";
 
-const app = createApp(App);
+createApp(Root)
+    .use(createPinia())
+    .use(router)
 
-app.use(createPinia());
-app.directive("ripple", ripple);
-app.mount("#app");
+    .directive("ripple", ripple)
+    .mount("#app");

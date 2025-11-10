@@ -5,6 +5,7 @@
     import { search, useFetch } from "@/util/fetch.ts";
 
     // TODO: recent searches
+    const props = defineProps<{ username: string }>();
 
     const searchText = ref("");
     const visible = ref(false);
@@ -30,7 +31,7 @@
 
 <template>
     <header class="flex items-center justify-center m-4 h-10">
-        <a href v-ripple>
+        <a href="/" v-ripple>
             <img src="@/assets/images/logo.png" />
         </a>
         
@@ -42,8 +43,11 @@
 
         <div class="flex-1"></div>
 
-        <div class="hover:brightness-120 flex items-center justify-center cursor-pointer">
-            <div class="bg-[#85E014] size-10 text-lg rounded-full text-white font-bold flex items-center justify-center">A</div>
+        <div class="flex items-center justify-center cursor-pointer" v-ripple>
+            <div class="bg-[#85E014] hover:bg-[#9fed40] size-10 text-lg rounded-full text-white
+                        font-bold flex items-center justify-center transition-[background] duration-200">
+                {{ props.username.toUpperCase()[0] }}
+            </div>
         </div>
     </header>
 

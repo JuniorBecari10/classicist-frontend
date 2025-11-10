@@ -7,6 +7,8 @@
     import { useCenterStore } from "@/stores/center.ts";
     const center = useCenterStore();
 
+    const props = defineProps<{ username: string }>();
+
     function getUniqueRandomNumbers(a: number, b: number, n: number): number[] {
         if (b < a)
             throw new Error("Invalid range: b must be >= a");
@@ -37,7 +39,7 @@
 
 <template>
     <div v-if="center.isHome()" class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
-        <h1 class="mt-6 ml-6 text-[32px] font-bold truncate">Good to see you, Antônio!</h1>
+        <h1 class="mt-6 ml-6 text-[32px] font-bold truncate">Good to see you, {{ props.username }}!</h1>
 
         <p class="ml-6 mt-4 text-[15px]">Recommended for you</p>
         <div class="flex pl-4 mt-4 gap-2 overflow-auto">
