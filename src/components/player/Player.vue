@@ -11,9 +11,7 @@
     import Controls from "./Controls.vue";
 
     const store = usePlayerStore();
-
     const audio = ref<HTMLAudioElement | null>(null);
-    const isPlaying = ref(false);
 
     const rec = computed(() => store.currentRecording);
     const movement = computed(() => store.currentMovement);
@@ -43,7 +41,7 @@
             return;
         }
 
-        const prefix = isPlaying.value ? "▶ " : "";
+        const prefix = store.isPlaying.value ? "▶ " : "";
         const title = formatDisplayWork(displayWork.value);
         const authors = formatDisplayAuthors(composer.value, performers.value);
 
@@ -56,7 +54,7 @@
             return;
         
         audio.value.play();
-        isPlaying.value = true;
+        store.setPlaying(true);
     }
 
     function handlePause() {
@@ -64,7 +62,7 @@
             return;
         
         audio.value.pause();
-        isPlaying.value = false;
+        store.setPlaying(false);
     }
 
     function handleSeek(progress: number) {
@@ -102,7 +100,7 @@
         if (audio.value && movement.value) {
             audio.value.src = getAudio();
             
-            if (isPlaying.value)
+            if (store.isPlaying.value)
                 audio.value.play();
         }
     });

@@ -1,4 +1,4 @@
-import type { Composer, DisplayWork, WorkTitle, TempoMarking, Catalog, Option, CompositionYear } from "@/model/work.ts";
+import type { Composer, DisplayWork, WorkTitle, TempoMarking, Catalog, Option, CompositionYear, Movement } from "@/model/work.ts";
 import type { Performer } from "@/model/recording.ts";
 
 import { KeyMode, Note } from "@/model/work.ts";
@@ -71,6 +71,50 @@ export function joinTempoMarkings(tempos: TempoMarking[]): string {
         .join(" ― ");
 }
 
+export function formatMovement(mov: Movement): string {
+    return `${
+        mov.form
+            ? `${mov.form}: `
+            : ""
+    }${joinTempoMarkings(mov.tempo_markings)}${
+        mov.nickname
+            ? ` • "${mov.nickname}"`
+            : ""
+    }`;
+}
+
+export function toRoman(num: number): string {
+    if (num <= 0 || num >= 4000) {
+        throw new Error(`Number must be between 1 and 3999; got ${num}`);
+    }
+
+    const romanMap: [number, string][] = [
+        [1000, "M"],
+        [900, "CM"],
+        [500, "D"],
+        [400, "CD"],
+        [100, "C"],
+        [90, "XC"],
+        [50, "L"],
+        [40, "XL"],
+        [10, "X"],
+        [9, "IX"],
+        [5, "V"],
+        [4, "IV"],
+        [1, "I"],
+    ];
+
+    let result = "";
+    for (const [value, symbol] of romanMap) {
+        while (num >= value) {
+            result += symbol;
+            num -= value;
+        }
+    }
+
+    return result;
+}
+
 // ---
 
 function formatTitleDisplayNoNick(title: WorkTitle): string {
@@ -120,36 +164,4 @@ function formatMode(mode: KeyMode) {
 
 function formatTempoMarking(tempo: TempoMarking): string {
     return `${tempo.form ? `${tempo.form}: ` : ""}${tempo.name}`;
-}
-
-function toRoman(num: number): string {
-    if (num <= 0 || num >= 4000) {
-        throw new Error(`Number must be between 1 and 3999; got ${num}`);
-    }
-
-    const romanMap: [number, string][] = [
-        [1000, "M"],
-        [900, "CM"],
-        [500, "D"],
-        [400, "CD"],
-        [100, "C"],
-        [90, "XC"],
-        [50, "L"],
-        [40, "XL"],
-        [10, "X"],
-        [9, "IX"],
-        [5, "V"],
-        [4, "IV"],
-        [1, "I"],
-    ];
-
-    let result = "";
-    for (const [value, symbol] of romanMap) {
-        while (num >= value) {
-            result += symbol;
-            num -= value;
-        }
-    }
-
-    return result;
 }

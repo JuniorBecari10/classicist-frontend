@@ -16,16 +16,16 @@ interface RecordingPerformer {
 
 export interface RecordedMovement {
   id: number;
-  movementIndex: number; 
-  movementId: number;
-  audioFile: AudioFile;
+  movement_index: number; 
+  movement_id: number;
+  audio_file: AudioFile;
 }
 
 export interface Recording {
   id: number;
-  workId: number;
+  work_id: number;
   year: number;
-  photoPath: string; 
+  photo_path: string; 
   performers: RecordingPerformer[];
   movements: RecordedMovement[];
 }

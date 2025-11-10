@@ -16,7 +16,7 @@
 
 <template>
     <select
-        class="rounded-full bg-fg-lighter h-10 max-w-1/2 pr-5 pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter truncate"
+        class="rounded-full bg-fg-lighter h-10 max-w-1/2 pr-5 pl-4 flex items-center text-[16px] hover:bg-fg-more-lighter truncate cursor-pointer"
         v-model="selectedId">
             <option v-for="rec in props.recs" :key="rec.id" :value="rec.id">
                 {{ joinPerformers(rec.performers.map(p => p.performer)) }} ― {{ rec.year }}

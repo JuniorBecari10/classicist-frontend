@@ -8,6 +8,8 @@ export const usePlayerStore = defineStore("player", () => {
     const currentRecordingIndex = ref(-1);
     const currentMovementIndex = ref(-1);
 
+    const isPlaying = ref(false);
+
     // --- Computed ---
     const currentRecording = computed<Recording | null>(() =>
         currentRecordingIndex.value >= 0 && currentRecordingIndex.value < queue.value.length
@@ -98,16 +100,33 @@ export const usePlayerStore = defineStore("player", () => {
     }
 
     function previous() {
-        if (hasPreviousMovement.value) currentMovementIndex.value--;
+        if (hasPreviousMovement.value)
+            currentMovementIndex.value--;
+        
         else if (hasPreviousRecording.value) {
             currentRecordingIndex.value--;
+
             const prevRec = queue.value[currentRecordingIndex.value];
             currentMovementIndex.value = prevRec.movements.length - 1;
         }
     }
 
+    function togglePlaying() {
+        isPlaying.value = !isPlaying.value;
+    }
+
+    function setPlaying(p: boolean) {
+        isPlaying.value = p;
+    }
+
+    function setMovIndex(index: number) {
+        currentMovementIndex.value = index;
+    }
+
     return {
         queue,
+        isPlaying,
+
         currentRecordingIndex,
         currentMovementIndex,
         currentRecording,
@@ -120,5 +139,9 @@ export const usePlayerStore = defineStore("player", () => {
         clear,
         next,
         previous,
+
+        togglePlaying,
+        setPlaying,
+        setMovIndex,
     };
 });
