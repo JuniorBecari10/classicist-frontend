@@ -46,6 +46,24 @@
         return w.movements[idx];
     });
 
+    // --- Sheet path reactive sync ---
+    const sheetPath = ref<string | null>(null);
+
+    watch(
+        () => [work.value, movement.value],
+        ([newWork, newMovement]) => {
+            if (!newWork || !Array.isArray(newWork.movements) || !newMovement) {
+                sheetPath.value = null;
+                return;
+            }
+
+            const idx = newMovement.movement_index;
+            const mv = newWork.movements[idx];
+            sheetPath.value = mv?.sheet?.path ?? null;
+        },
+        { immediate: true }
+    );
+
     // --- Update document title ---
     watch(
         [rec, movement, work, () => store.isPlaying.value],
@@ -140,7 +158,7 @@
     // --- Reactively reload audio on movement/recording change ---
     watch(
         () => [rec.value?.id, movement.value?.id],
-        async ([newRecId, newMovId], [oldRecId, oldMovId]) => { // error undefined
+        async ([newRecId, newMovId], [oldRecId, oldMovId]) => {
             if (!audio.value) return;
 
             const newSrc = getAudio();
@@ -169,12 +187,24 @@
         const onPlay = () => store.setPlaying(true);
         const onPause = () => store.setPlaying(false);
 
+        // NEW: advance automatically when track ends
+        const onEnded = () => {
+            if (store.hasNext) {
+                crossfadeTo(() => store.next());
+            } else {
+                store.setPlaying(false);
+                audio.value!.currentTime = 0;
+            }
+        };
+
         audio.value.addEventListener("play", onPlay);
         audio.value.addEventListener("pause", onPause);
+        audio.value.addEventListener("ended", onEnded);
 
         onUnmounted(() => {
             audio.value?.removeEventListener("play", onPlay);
             audio.value?.removeEventListener("pause", onPause);
+            audio.value?.removeEventListener("ended", onEnded);
         });
     });
 </script>
@@ -221,7 +251,7 @@
                 <Controls
                     @volume="handleVolume"
                     :lyrics="workMovement?.lyrics ?? null"
-                    :sheet="workMovement?.sheet?.path ?? null"
+                    :sheet="sheetPath"
                 />
             </div>
         </div>

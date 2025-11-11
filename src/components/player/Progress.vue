@@ -25,6 +25,8 @@
     const percentage = computed(() => (current.value / props.length) * 100);
     const progressBar = ref<HTMLElement | null>(null);
 
+    const hasPrevious = computed(() => current.value >= 1 || props.hasPrevious);
+
     let interval: number | undefined;
 
     onMounted(() => {
@@ -114,8 +116,8 @@
         <div class="w-full h-1/2 flex justify-center">
             <div class="flex w-1/5 h-full justify-evenly items-center">
                 <Button :action="rewind">
-                    <img v-show="props.hasPrevious" src="@/assets/images/back.png" />
-                    <img v-show="!props.hasPrevious" src="@/assets/images/back-dimmed.png" />
+                    <img v-show="hasPrevious" src="@/assets/images/back.png" />
+                    <img v-show="!hasPrevious" src="@/assets/images/back-dimmed.png" />
                 </Button>
 
                 <Button :action="togglePause">

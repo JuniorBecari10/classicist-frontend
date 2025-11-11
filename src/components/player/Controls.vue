@@ -72,7 +72,7 @@
     }
 
     function sheet() {
-        showSheet.value = true;
+        showSheet.value = !showSheet.value;
     }
 
     function toggleMute() {
@@ -112,6 +112,8 @@
             </Button>
         </div>
 
+        <div v-show="showSheet" class="w-5 h-1.5 rounded-full bg-[#18A0E4] absolute right-57 bottom-7" />
+
         <div class="w-full mr-3" ref="progressBarRef">
             <ProgressBar :percentage="volume" @seek="handleVolume" :disabled="muted" />
         </div>
@@ -120,6 +122,8 @@
             <Tooltip>{{ `${Math.round(volume)}%` }}</Tooltip>
         </div>
     </div>
+
+    {{console.log(props.sheet) }}
 
     <div ref="dropdown" v-if="showSheet" class="absolute left-1/2 bottom-30 w-200 h-[80vh] -translate-x-1/2 bg-fg-lighter shadow-xl z-50 rounded-lg p-4 overflow-auto">
         <img :src="getSheet()" class="w-full filter invert rounded-md" />
