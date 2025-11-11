@@ -3,6 +3,7 @@
     import WorkTile from "../util/WorkTile.vue";
 
     import Work from "../screens/Work.vue";
+    import Composer from "../screens/Composer.vue";
 
     import { useCenterStore } from "@/stores/center.ts";
     const center = useCenterStore();
@@ -53,6 +54,6 @@
     </div>
 
     <Work v-if="center.isWork()" :work="center.screen.value" :id="center.screen.recId" />
-    <div v-if="center.isComposer()">composer todo {{ center.screen.value }}</div>
+    <Composer v-if="center.isComposer()" :composer="center.screen.value" />
     <div v-if="center.isPerformer()">performer todo {{ center.screen.value }}</div>
 </template>

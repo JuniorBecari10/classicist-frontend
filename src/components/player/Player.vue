@@ -140,7 +140,7 @@
     // --- Reactively reload audio on movement/recording change ---
     watch(
         () => [rec.value?.id, movement.value?.id],
-        async ([newRecId, newMovId], [oldRecId, oldMovId]) => {
+        async ([newRecId, newMovId], [oldRecId, oldMovId]) => { // error undefined
             if (!audio.value) return;
 
             const newSrc = getAudio();

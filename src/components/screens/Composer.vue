@@ -1,24 +1,30 @@
+<script setup lang="ts">
+    import { BACKEND_URL } from "@/util/consts.ts";
+    
+    const props = defineProps<{
+        composer: Composer;
+    }>();
+
+    const photo = `${BACKEND_URL}/public/images/composers/${props.composer.photo_path}`;
+    const years = `${props.composer.birth_year}${
+        props.composer.death_year
+            ? ` ― ${props.composer.death_year}`
+            : ""
+    }`;
+</script>
+
 <template>
-    <section class="font-fredoka select-none">
-        <div class="bg-[url('./src/resources/Amadeus.jpg')] h-60 bg-[center_-40rem] bg-fixed">
-            <div class="h-1/1 bg-gradient-to-t from-[#252525] to-transparent">
-                <div class="pt-5 pl-8 pt-0">
-                    <p class="font-semibold text-[3rem]">Wolfgang Amadeus Mozart</p>
-                    <p class="font-light text-[1.5rem] text-gray-300">Composer • 1756 ― 1791</p>
+    <section class="flex-1 h-full bg-fg rounded-lg">
+        <div class="h-50 bg-cover bg-center bg-fixed"
+            :style="{ backgroundImage: `url('${photo}')` }">
+            <div class="h-full bg-gradient-to-t from-fg to-black/30">
+                <div class="pt-5 pl-8">
+                    <p class="font-semibold text-4xl mb-2">{{ props.composer.name }}</p>
+                    <p class="text-xl text-fgray">
+                        Composer • {{ years }}
+                    </p>
                 </div>
             </div>
         </div>
-
-        <!-- Body -->
-        <p class="pl-9 mt-3 font-light text-xl">Works</p>
-        <section class="grid justify-center my-3 w-full gap-8">
-            <Works />
-            <About />
-        </section>
     </section>
 </template>
-
-<script setup lang="ts">
-    import Works from './Works.vue'
-    import About from './About.vue'
-</script>
