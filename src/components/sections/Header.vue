@@ -8,8 +8,10 @@
     const props = defineProps<{ username: string }>();
 
     const searchText = ref("");
-    const visible = ref(false);
+    const searchVisible = ref(false);
     const query = computed(() => searchText.value.trim());
+
+    const userVisible = ref(false);
 
     const { data: results, loading: loading, error: error, reload } =
         useFetch(() => search(query.value));
@@ -20,7 +22,7 @@
 
     function clear() {
         searchText.value = "";
-        visible.value = false;
+        searchVisible.value = false;
         results.value = [];
     }
 
@@ -38,20 +40,20 @@
         <div class="flex-1"></div>
 
         <div class="w-80 h-10 flex">
-            <SearchBar v-model="searchText" v-model:visible="visible" :blur="clear">Search</SearchBar>
+            <SearchBar v-model="searchText" v-model:visible="searchVisible" :blur="clear">Search</SearchBar>
         </div>
 
         <div class="flex-1"></div>
 
-        <div class="flex items-center justify-center cursor-pointer" v-ripple>
-            <div class="bg-[#85E014] hover:bg-[#9fed40] size-10 text-lg rounded-full text-white
-                        font-bold flex items-center justify-center transition-[background] duration-200">
+        <div class="flex items-center justify-center">
+            <div class="bg-[#85E014] hover:bg-[#9fed40] size-10 text-lg rounded-full text-white cursor-pointer
+                        font-bold flex items-center justify-center transition-[background] duration-200" v-ripple>
                 {{ props.username.toUpperCase()[0] }}
             </div>
         </div>
     </header>
 
-    <div v-show="visible"
+    <div v-show="searchVisible"
         class="absolute left-1/2 top-17 -translate-x-1/2 bg-fg-lighter shadow-xl w-100 max-h-100 min-h-15 z-50 rounded-lg py-2 overflow-auto">
 
         <div v-if="loading"></div>
