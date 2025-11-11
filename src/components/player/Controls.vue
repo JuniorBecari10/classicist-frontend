@@ -1,5 +1,7 @@
 <script setup lang="ts">
-    import { ref, onMounted, onUnmounted, defineEmits } from "vue";
+    import { ref, onMounted, onUnmounted, onBeforeUnmount, defineEmits } from "vue";
+    import { BACKEND_URL } from "@/util/consts.ts";
+    
     import ProgressBar from "../util/ProgressBar.vue";
     import Button from "../util/Button.vue";
     import Tooltip from "../util/Tooltip.vue";
@@ -9,6 +11,9 @@
     const dragging = ref(false);
 
     const progressBarRef = ref<HTMLElement | null>(null);
+    const dropdown = ref<HTMLElement | null>(null);
+
+    const showSheet = ref(false);
 
     const props = defineProps<{
         lyrics: string[] | null;
@@ -47,12 +52,27 @@
         window.removeEventListener("mouseup", handleMouseUp);
     });
 
+    function handleClickOutside(event: MouseEvent) {
+        const el = dropdown.value;
+        if (showSheet.value && el && !el.contains(event.target as Node)) {
+            showSheet.value = false;
+        }
+    }
+
+    onMounted(() => {
+        document.addEventListener("click", handleClickOutside);
+    });
+
+    onBeforeUnmount(() => {
+        document.removeEventListener("click", handleClickOutside);
+    });
+
     function lyrics() {
-        console.log("lyricsasjfsdhpfjsdoifj");
+
     }
 
     function sheet() {
-        
+        showSheet.value = true;
     }
 
     function toggleMute() {
@@ -70,7 +90,10 @@
                 ? 0
                 : volume.value / 100);
     }
-    console.log(props.lyrics, props.sheet)
+
+    function getSheet(): string {
+        return `${BACKEND_URL}/public/sheet/${props.sheet}`;
+    }
 </script>
 
 <template>
@@ -80,7 +103,7 @@
                 <img v-if="props.lyrics" src="@/assets/images/lyrics.png">
                 <img src="@/assets/images/lyrics-dimmed.png">
             </Button>
-            <Button :action="sheet">
+            <Button :action="sheet" @click.stop>
                 <img src="@/assets/images/sheet.png">
             </Button>
             <Button :action="toggleMute">
@@ -96,5 +119,9 @@
         <div class="transition-[opacity] duration-100 ease-in" :style="{ opacity: dragging ? 1 : 0}">
             <Tooltip>{{ `${Math.round(volume)}%` }}</Tooltip>
         </div>
+    </div>
+
+    <div ref="dropdown" v-if="showSheet" class="absolute left-1/2 bottom-30 w-200 h-[80vh] -translate-x-1/2 bg-fg-lighter shadow-xl z-50 rounded-lg p-4 overflow-auto">
+        <img :src="getSheet()" class="w-full filter invert rounded-md" />
     </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, watch, watchEffect, computed } from "vue";
+    import { ref, watch, computed, onMounted, onUnmounted } from "vue";
     import { getWork, useFetch } from "@/util/fetch.ts";
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
     import { workToDisplayWork } from "@/util/convert.ts";
@@ -12,26 +12,22 @@
 
     const store = usePlayerStore();
     const audio = ref<HTMLAudioElement | null>(null);
+    const fadeInterval = ref<number | null>(null);
 
     const rec = computed(() => store.currentRecording);
     const movement = computed(() => store.currentMovement);
 
     const { data: work, loading, error, reload } = useFetch(() => {
-        if (!rec.value?.work_id)
-            return null;
-        
+        if (!rec.value?.work_id) return null;
         return getWork(rec.value.work_id);
     });
 
     watch(() => rec.value?.work_id, (newId, oldId) => {
-        if (newId && newId !== oldId)
-            reload();
+        if (newId && newId !== oldId) reload();
     });
 
     const displayWork = computed(() => {
-        if (!work.value)
-            return null;
-
+        if (!work.value) return null;
         const movementNum = store.currentMovementIndex + 1;
         return workToDisplayWork(work.value, movementNum);
     });
@@ -49,61 +45,60 @@
 
         return w.movements[idx];
     });
-    console.log(movement.value, workMovement.value);
 
-    watchEffect(() => {
-        if (!rec.value || !movement.value || !work.value) {
-            document.title = "Classicist";
-            return;
-        }
+    // --- Update document title ---
+    watch(
+        [rec, movement, work, () => store.isPlaying.value],
+        () => {
+            if (!rec.value || !movement.value || !work.value) {
+                document.title = "Classicist";
+                return;
+            }
 
-        const prefix = store.isPlaying.value ? "▶ " : "";
-        const title = formatDisplayWork(displayWork.value);
-        const authors = formatDisplayAuthors(composer.value, performers.value);
+            const prefix = store.isPlaying.value ? "▶ " : "";
+            const title = formatDisplayWork(displayWork.value);
+            const authors = formatDisplayAuthors(composer.value, performers.value);
 
-        document.title = `${prefix}${title} • ${authors} ― Classicist`;
-    });
+            document.title = `${prefix}${title} • ${authors} ― Classicist`;
+        },
+        { immediate: true }
+    );
 
-    // --- controls ---
+    // --- Audio controls ---
     function handlePlay() {
-        if (!audio.value)
-            return;
-        
+        if (!audio.value) return;
         audio.value.play();
         store.setPlaying(true);
     }
 
     function handlePause() {
-        if (!audio.value)
-            return;
-        
+        if (!audio.value) return;
         audio.value.pause();
         store.setPlaying(false);
     }
 
     function handleSeek(progress: number) {
-        if (audio.value)
-            audio.value.currentTime = progress;
+        if (audio.value) audio.value.currentTime = progress;
     }
 
     function handleRewind() {
-        if (audio.value)
-            audio.value.currentTime = 0;
+        if (audio.value) audio.value.currentTime = 0;
     }
 
     function handlePrevious() {
-        store.previous();
-        audio.value.currentTime = 0;
+        crossfadeTo(() => {
+            store.previous();
+        });
     }
 
     function handleNext() {
-        store.next();
-        audio.value.currentTime = 0;
+        crossfadeTo(() => {
+            store.next();
+        });
     }
 
     function handleVolume(percent: number) {
-        if (audio.value)
-            audio.value.volume = percent;
+        if (audio.value) audio.value.volume = percent;
     }
 
     function getAudio(): string {
@@ -111,14 +106,76 @@
         return path ? `${BACKEND_URL}/public/audio/${path}` : "";
     }
 
-    // reload audio when recording or movement changes
-    watchEffect(() => {
-        if (audio.value && movement.value) {
-            audio.value.src = getAudio();
-            
-            if (store.isPlaying.value)
-                audio.value.play();
+    // --- Crossfade logic ---
+    async function crossfadeTo(action: () => void) {
+        if (!audio.value) {
+            action();
+            return;
         }
+
+        const fadeTime = 500; // ms for crossfade out
+        const steps = 20;
+        const stepTime = fadeTime / steps;
+        const initialVolume = audio.value.volume;
+
+        if (fadeInterval.value) {
+            clearInterval(fadeInterval.value);
+            fadeInterval.value = null;
+        }
+
+        let step = 0;
+        fadeInterval.value = window.setInterval(() => {
+            if (!audio.value) return;
+            step++;
+            audio.value.volume = initialVolume * (1 - step / steps);
+            if (step >= steps) {
+                clearInterval(fadeInterval.value);
+                fadeInterval.value = null;
+                audio.value.volume = initialVolume;
+                action(); // trigger next/previous
+            }
+        }, stepTime);
+    }
+
+    // --- Reactively reload audio on movement/recording change ---
+    watch(
+        () => [rec.value?.id, movement.value?.id],
+        async ([newRecId, newMovId], [oldRecId, oldMovId]) => {
+            if (!audio.value) return;
+
+            const newSrc = getAudio();
+            if (!newSrc) return;
+
+            // Stop old playback, reload source
+            audio.value.pause();
+            audio.value.src = newSrc;
+            audio.value.load();
+
+            if (store.isPlaying.value) {
+                try {
+                    await audio.value.play();
+                } catch (err) {
+                    console.warn("Autoplay prevented:", err);
+                }
+            }
+        },
+        { immediate: true }
+    );
+
+    // --- Keep store in sync with actual audio events ---
+    onMounted(() => {
+        if (!audio.value) return;
+
+        const onPlay = () => store.setPlaying(true);
+        const onPause = () => store.setPlaying(false);
+
+        audio.value.addEventListener("play", onPlay);
+        audio.value.addEventListener("pause", onPause);
+
+        onUnmounted(() => {
+            audio.value?.removeEventListener("play", onPlay);
+            audio.value?.removeEventListener("pause", onPause);
+        });
     });
 </script>
 

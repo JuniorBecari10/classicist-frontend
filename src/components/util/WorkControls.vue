@@ -1,9 +1,13 @@
 <script setup lang="ts">
     import { ref } from "vue";
     import RecordingSelect from "../util/RecordingSelect.vue";
+    import { useLibraryStore } from "@/stores/library.ts";
+
+    const lib = useLibraryStore();
 
     const selectedId = defineModel<number | null>({ default: null });
     const props = defineProps<{
+        work: Work;
         recs: Recording[];
     }>();
 
@@ -18,6 +22,11 @@
                 hover:bg-[#42aee4] play transition-[background] duration-400" :class="{pause: paused}"
             />
         </div>
+
+        <button class="p-3 bg-fg-lighter hover:bg-fg-more-lighter rounded-full transition-[background] duration-200 cursor-pointer"
+            v-ripple @click="lib.addWork(props.work)">
+            <img src="@/assets/images/bookmark.png" />
+        </button>
 
         <RecordingSelect :recs="props.recs" v-model="selectedId" />
     </div>
