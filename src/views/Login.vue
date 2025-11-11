@@ -53,17 +53,15 @@
 
                     <span
                         v-if="errmsgs[1] && option"
-                        class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]"
-                    >
-                        Username must have more than 3 characters.
+                        class="w-full -mt-4 ml-1 font-fredoka text-left text-[#e11] text-[80%]">
+                        • Username must have more than 3 characters, no spaces and no special characters.
                     </span>
 
                     <!-- Password -->
                     <div class="flex items-center relative">
                         <div
                             class="bg-gray-700 rounded-[12px] w-full overflow-hidden relative transition-[padding]"
-                            :class="creds[1].length && option ? 'pb-1.5' : ''"
-                        >
+                            :class="creds[1].length && option ? 'pb-1.5' : ''">
                             <div class="flex items-center">
                                 <input
                                     type="password"
