@@ -3,7 +3,9 @@
     import SearchBar from "../util/SearchBar.vue";
     import SearchResult from "../util/SearchResult.vue";
     import { search, useFetch } from "@/util/fetch.ts";
+    import { useRouter } from "vue-router";
 
+    const router = useRouter();
     const props = defineProps<{ username: string }>();
 
     const searchText = ref("");
@@ -126,7 +128,7 @@
         <h1 class="font-bold text-xl mt-2">{{ props.username }}</h1>
 
         <button class="w-full bg-fg-more-lighter hover:bg-fg-even-more-lighter transition-[background]
-            duration-200 mt-5 py-1 rounded-md cursor-pointer" v-ripple>
+            duration-200 mt-5 py-1 rounded-md cursor-pointer" v-ripple @click="router.push('/')">
             Log out
         </button>
     </div>
