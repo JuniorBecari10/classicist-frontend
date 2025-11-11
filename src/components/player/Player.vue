@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, watchEffect, computed } from "vue";
+    import { ref, watch, watchEffect, computed } from "vue";
     import { getWork, useFetch } from "@/util/fetch.ts";
     import { formatDisplayWork, formatDisplayAuthors } from "@/util/format.ts";
     import { workToDisplayWork } from "@/util/convert.ts";
@@ -23,9 +23,8 @@
         return getWork(rec.value.work_id);
     });
 
-    watchEffect(() => {
-        const key = JSON.stringify(store.queue.map(r => r.id));
-        if (rec.value?.work_id)
+    watch(() => rec.value?.work_id, (newId, oldId) => {
+        if (newId && newId !== oldId)
             reload();
     });
 
@@ -40,6 +39,17 @@
     const composer = computed(() => work.value?.composer ?? null);
     const performers = computed(() => rec.value?.performers?.map(p => p.performer) ?? []);
     const imagePath = computed(() => rec.value?.photo_path ?? "");
+    const workMovement = computed(() => {
+        const w = work.value;
+        const mov = movement.value;
+        if (!w || !Array.isArray(w.movements) || !mov) return null;
+
+        const idx = mov.movement_index;
+        if (idx == null || idx < 0 || idx >= w.movements.length) return null;
+
+        return w.movements[idx];
+    });
+    console.log(movement.value, workMovement.value);
 
     watchEffect(() => {
         if (!rec.value || !movement.value || !work.value) {
@@ -151,7 +161,11 @@
                     @next="handleNext"
                 />
 
-                <Controls @volume="handleVolume" />
+                <Controls
+                    @volume="handleVolume"
+                    :lyrics="workMovement?.lyrics ?? null"
+                    :sheet="workMovement?.sheet?.path ?? null"
+                />
             </div>
         </div>
     </div>

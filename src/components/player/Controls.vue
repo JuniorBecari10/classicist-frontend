@@ -10,6 +10,11 @@
 
     const progressBarRef = ref<HTMLElement | null>(null);
 
+    const props = defineProps<{
+        lyrics: string[] | null;
+        sheet: string;
+    }>();
+
     const emit = defineEmits<{
         (e: "volume", percent: number): void;
     }>()
@@ -43,7 +48,7 @@
     });
 
     function lyrics() {
-        
+        console.log("lyricsasjfsdhpfjsdoifj");
     }
 
     function sheet() {
@@ -65,13 +70,15 @@
                 ? 0
                 : volume.value / 100);
     }
+    console.log(props.lyrics, props.sheet)
 </script>
 
 <template>
     <div class="w-[18%] h-full flex justify-center items-center p-4 ml-15">
         <div class="w-1/2 flex justify-end items-center">
-            <Button :action="lyrics">
-                <img src="@/assets/images/lyrics.png">
+            <Button :action="lyrics" :disabled="props.lyrics === null">
+                <img v-if="props.lyrics" src="@/assets/images/lyrics.png">
+                <img src="@/assets/images/lyrics-dimmed.png">
             </Button>
             <Button :action="sheet">
                 <img src="@/assets/images/sheet.png">
