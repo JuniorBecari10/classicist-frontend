@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import { ref, onMounted, watch, computed } from "vue";
     import { getRecsForWork, useFetch } from "@/util/fetch.ts";
+    
     import {
         formatTitleDisplayKey,
         formatCatalog,
@@ -9,9 +10,16 @@
         formatMovement,
         convertFormatTime
     } from "@/util/format.ts";
+    
+    import { useLibraryStore } from "@/stores/library.ts";
+    import { usePlayerStore } from "@/stores/player.ts";
+
+    const lib = useLibraryStore();
+    const player = usePlayerStore();
 
     const props = defineProps<{
         work: Work;
+        showComposer?: boolean;
     }>();
 
     const { data: recs, loading, error } = useFetch(() =>
@@ -44,6 +52,26 @@
         () => selectFirst(),
         { immediate: true, deep: true }
     );
+
+    function play(index: number) {
+        player.clear();
+        player.addRecording(recs.value.filter(rec => rec.id === selectedId.value)[0]);
+        player.setMovIndex(index);
+        player.setPlaying(true);
+    }
+
+    const composerSplit = props.work.composer.name.split(" ");
+    const composerLastName = composerSplit[composerSplit.length - 1];
+
+    const workTitle = computed(
+        () => `${
+            props.showComposer
+                ? `${composerLastName}: `
+                : ""
+        }${formatTitleDisplayKey(props.work.title, props.work.key.note, props.work.key.mode)}`
+    );
+
+    const catalog = computed(() => formatCatalog(props.work.catalog));
 </script>
 
 <template>
@@ -56,7 +84,7 @@
     </template>
 
     <template v-else-if="recs">
-        <p class="w-full my-3 ml-1 text-[95%] text-fgray">Featured work:</p>
+        <p class="w-full my-3 ml-1 text-[95%] text-fgray">Featured work</p>
 
         <div
             class="grid grid-cols-1 rounded-[24px] bg-[#303030] w-full h-auto justify-center justify-items-center transition-all duration-300"
@@ -81,7 +109,7 @@
                     >
                         <path
                             d="M1 12L6 6.5L1 1"
-                            :stroke="hidden ? 'white' : '#18a0e4'"
+                            stroke="white"
                             :stroke-width="hidden ? '1px' : '2px'"
                             stroke-linecap="round"
                         />
@@ -89,14 +117,20 @@
 
                     <span
                         class="text-[115%] truncate transition-colors duration-150"
-                        :class="hidden ? 'font-normal text-white' : 'font-semibold text-[#18a0e4]'"
+                        :class="hidden ? 'font-normal text-white' : 'font-semibold'"
+                        :title="workTitle"
                         @click.self="flipWork">
-                        {{ formatTitleDisplayKey(props.work.title, props.work.key.note, props.work.key.mode) }}
+                        {{ workTitle }}
                     </span>
 
-                    <div class="rounded-full bg-fg-more-lighter px-3 py-1.5 truncate">
-                        {{ formatCatalog(props.work.catalog) }}
+                    <div class="rounded-lg bg-fg-more-lighter px-3 py-1.5 truncate" :title="catalog">
+                        {{ catalog }}
                     </div>
+
+                    <button class="rounded-full bg-fg-more-lighter hover:bg-fg-even-more-lighter transition-[background] duration-200 p-2 cursor-pointer"
+                        v-ripple @click="lib.addWork(props.work)">
+                        <img src="@/assets/images/bookmark.png" class="size-5" />
+                    </button>
 
                     <select
                         v-model="selectedId"
@@ -117,19 +151,22 @@
                 v-show="!hidden">
 
                 <div
-                    v-for="(mov, index) in props.work.movements"
+                    v-for="mov, index in props.work.movements"
                     :key="mov.id"
+                    @click="play(index)"
                     class="
-                        flex rounded-full pl-[19.5px] pr-[1%] w-[98%] cursor-pointer py-2
+                        flex flex-nowrap rounded-full pl-[19.5px] pr-[1%] w-[98%] cursor-pointer py-2
                         items-center justify-center hover:bg-[#3c3c3c] transition-colors duration-150
                     " v-ripple>
-                    <section class="flex-1 space-x-5">
+                    <section class="flex-1 flex flex-nowrap space-x-5">
                         <div class="inline-flex w-5 justify-center">
-                            <span class="!font-jetbrains">
+                            <div v-if="props.work.movements.length === 1" class="bg-white rounded-full size-[7px] mt-2 ml-0.5" />
+
+                            <span v-else class="!font-jetbrains">
                                 {{ toRoman(index + 1) }}
                             </span>
                         </div>
-                        <span>{{ formatMovement(mov) }}</span>
+                        <span class="truncate">{{ formatMovement(mov) }}</span>
                     </section>
 
                     <span class="!font-jetbrains text-white font-light">

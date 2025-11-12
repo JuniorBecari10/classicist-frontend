@@ -24,6 +24,15 @@ export async function getRecsForWork(id: number): Promise<Recording[]> {
     return res.json();
 }
 
+export async function getRecsByPerformer(id: number): Promise<Recording[]> {
+    const res = await fetch(`${BACKEND_URL}/api/recsbyperformer?id=${id}`);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch recordings (${res.status} ${res.statusText})`);
+    }
+
+    return res.json();
+}
 
 export async function getWorksByComposer(id: number): Promise<Work[]> {
     const res = await fetch(`${BACKEND_URL}/api/worksbycomposer?id=${id}`);

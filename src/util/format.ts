@@ -15,7 +15,7 @@ export function formatDisplayWork(dw: DisplayWork, singleMov: boolean): string {
             : ""
     } ${joinTempoMarkings(dw.tempos)}${
         dw.nickname
-            ? `• "${dw.nickname}"`
+            ? ` • "${dw.nickname}"`
             : ""
     }`;
 }
