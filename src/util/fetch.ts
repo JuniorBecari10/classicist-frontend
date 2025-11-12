@@ -24,6 +24,17 @@ export async function getRecsForWork(id: number): Promise<Recording[]> {
     return res.json();
 }
 
+
+export async function getWorksByComposer(id: number): Promise<Work[]> {
+    const res = await fetch(`${BACKEND_URL}/api/worksbycomposer?id=${id}`);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch works (${res.status} ${res.statusText})`);
+    }
+
+    return res.json();
+}
+
 export async function search(query: string): Promise<SearchResult[]> {
     const res = await fetch(`${BACKEND_URL}/api/search?q=${query}`);
 

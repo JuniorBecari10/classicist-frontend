@@ -1,144 +1,142 @@
-<template>
-    <!-- <div
-        v-if="loading || !work"
-        class="w-full mt-2 h-22 bg-fg-dimmed rounded-lg flex flex-col justify-center items-center animate-pulse">
-        <h1 class="text-xl font-semibold">Loading work...</h1>
-        <p>Please wait a moment.</p>
-    </div> -->
+<script setup lang="ts">
+    import { ref, onMounted, watch, computed } from "vue";
+    import { getRecsForWork, useFetch } from "@/util/fetch.ts";
+    import {
+        formatTitleDisplayKey,
+        formatCatalog,
+        joinPerformers,
+        toRoman,
+        formatMovement,
+        convertFormatTime
+    } from "@/util/format.ts";
 
-    <div class="grid grid-cols-1 rounded-[24px] bg-[#303030] w-[calc(100vw-5rem)] h-auto justify-center justify-items-center" :class="{'pb-2': !hidden}">
-        <!-- Work -->
-        <div class="works" :class="{'mb-3': !hidden}" @click.self="flipWork">
-            <section class="inline-flex items-center justify-between space-x-5">
+    const props = defineProps<{
+        work: Work;
+    }>();
 
-                <svg class="scale-150 mr-8 ml-1 transition rotate delay-0.4" :class="hidden ? '' : 'rotate-90'" width="7" height="13" viewBox="0 0 7 13" fill="none" xmlns="http://www.w3.org/2000/svg" @click="flipWork">
-                    <path d="M1 12L6 6.5L1 1" :stroke="hidden ? 'white' : '#18a0e4'" :stroke-width="hidden ? '1px' : '2px'" stroke-linecap="round"/>
-                </svg>
+    const { data: recs, loading, error } = useFetch(() =>
+        getRecsForWork(props.work.id)
+    );
 
-                <span class="text-[115%]" :class="hidden ? 'font-light' : 'font-semibold text-[#18a0e4]'" @click.self="flipWork">Symphony No. 5</span>
-                <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Op. 67</div>
-                <select v-model="performance" class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">
-                    <option class="">
-                        <span>Herbert von Karajan • Berliner Philarmoniker ― 1984</span>
-                    </option>
-                    <option class="">
-                        <span>Claudio Abbado • Wiener Philarmoniker ― 1978</span>
-                    </option>
-                    <option class="">
-                        <span>Herbert Richers • São Paulo ― 1996</span>
-                    </option>
-                </select>
-            </section>
-            <span class="font-jetbrains mt-0.5" :class="hidden ? 'font-light' : 'font-extrabold text-[#18a0e4]'" @click="flipWork">37:38</span>
-        </div>
-
-        <!-- Acts -->
-        <section class="grid grid-cols-1 w-full justify-items-center" v-show="!hidden">            
-            <div class="acts">
-                <section class="flex-1 space-x-5">
-                    <div class="inline-flex w-5 justify-center">
-                        <span class="font-jetbrains font-extrabold text-[#18a0e4]">I</span>
-                    </div>
-                    <span class="font-semibold text-[#18a0e4]">Allegro com brio</span>
-                </section>
-                <span class="font-jetbrains font-extrabold text-[#18a0e4]">7:22</span>
-            </div>
-            <div class="acts">
-                <section class="flex-1 space-x-5">
-                    <div class="inline-flex w-5 justify-center">
-                        <span class="font-jetbrains font-light">II</span>
-                    </div>
-                    <span>Andante con moto</span>
-                </section>
-                <span class="font-jetbrains font-light">9:21</span>
-            </div>
-            <div class="acts">
-                <section class="flex-1 space-x-5">
-                    <div class="inline-flex w-5 justify-center">
-                        <span class="font-jetbrains font-light">III</span>
-                    </div>
-                    <span>Scherzo: Allegro</span>
-                </section>
-                <span class="font-jetbrains font-light">4:49</span>
-            </div>
-            <div class="acts">
-                <section class="flex-1 space-x-5">
-                    <div class="inline-flex w-5 justify-center">
-                        <span class="font-jetbrains font-light">IV</span>
-                    </div>
-                    <span>Finale: Allegro</span>
-                </section>
-                <span class="font-jetbrains font-light">8:43</span>
-            </div>
-        </section>
-    </div>
-
-    <!-- 
-    <div class="grid grid-cols-1 rounded-[36px] bg-[#303030] -mt-3 w-[calc(100vw-5rem)] h-auto justify-center justify-items-center">
-        <div class="inline-flex rounded-full bg-[#3c3c3c] px-9 w-full h-[3.25rem] items-center justify-between">
-            <section class="inline-flex items-center justify-between space-x-5">
-                <div class="size-[19.5px]">
-                    <img src="../resources/arrow.svg" class="scale-150 mt-1 mr-8">
-                </div>
-                <span class="font-light text-[115%]">Symphony No. 9 • “Choral”</span>
-                <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Op. 125</div>
-                <div class="rounded-full bg-[#4c4c4c] px-3 py-1.5 font-light">Herbert von Karajan • Berliner
-                    Philarmoniker ― 1984</div>
-            </section>
-            <span class="font-mono">01:06:25</span>
-        </div>
-    </div>
-    -->
-</template>
-
-<script setup lang = "ts">
-    import { ref } from 'vue';
-    //import {getWork, useFetch} from '@/util/fetch.ts'
-
-    //const props = defineProps<{workId: number}>()
-
-    let hidden = ref(0)
-    const flipWork = () => hidden.value ^= 1
-    let performance = 'Herbert von Karajan • Berliner Philarmoniker ― 1984'
-    
-    /* const { data: work, loading, error } = useFetch(() => {
-        if (!props.workId)
+    const hidden = ref(false);
+    const selectedId = defineModel<number | null>({ default: null });
+    const selectedRec = computed(() => {
+        if (!recs.value || selectedId.value == null)
             return null;
-        
-        return getWork(props.workId);
-    }); */
+
+        return recs.value.find(r => r.id === selectedId.value) ?? null;
+    });
+
+    const flipWork = () => (hidden.value = !hidden.value);
+
+    function selectFirst() {
+        if (recs.value && recs.value.length > 0) {
+            selectedId.value = recs.value[0].id;
+        } else {
+            selectedId.value = null;
+        }
+    }
+
+    onMounted(selectFirst);
+
+    watch(
+        () => recs.value,
+        () => selectFirst(),
+        { immediate: true, deep: true }
+    );
 </script>
 
-<style>
-    .works {
-        display: inline-flex;
-        border-radius: 36px;
-        background: #3c3c3c;
-        padding-left: 32px;
-        padding-right: 2%;
-        width: 100%;
-        height: 3.25rem;
-        align-items: center;
-        justify-content: space-between;
-        transition: background 0.1s ease-in-out;
-    }
-    .works:hover {
-        background: #404040;
-        cursor: pointer;
-    }
-    .acts {
-        display: inline-flex;
-        border-radius: calc(infinity * 1px);
-        padding-left: 19.5px;
-        padding-right: 1%;
-        margin-block: 4px;
-        width: 98%;
-        height: 2rem;
-        align-items: center;
-        justify-content: center;
-    }
-    .acts:hover {
-        background: #3c3c3c;
-    }
-</style>
+<template>
+    <template v-if="loading">
+        <div class="size-40 bg-gray-300 animate-pulse rounded-md mb-2"></div>
+    </template>
 
+    <template v-else-if="error">
+        <div class="size-40 bg-red-500 animate-pulse rounded-md mb-2"></div>
+    </template>
+
+    <template v-else-if="recs">
+        <p class="w-full my-3 ml-1 text-[95%] text-fgray">Featured work:</p>
+
+        <div
+            class="grid grid-cols-1 rounded-[24px] bg-[#303030] w-full h-auto justify-center justify-items-center transition-all duration-300"
+            :class="{ 'pb-2': !hidden }">
+            
+            <!-- Work Header -->
+            <div
+                class="inline-flex rounded-[36px] bg-[#3c3c3c] px-8 pr-[1%] w-full h-[3.25rem] items-center justify-between hover:bg-[#404040] transition-colors duration-100 cursor-pointer"
+                :class="{ 'mb-3': !hidden }"
+                @click.self="flipWork">
+
+                <section class="flex w-full items-center justify-start space-x-4">
+                    <svg
+                        class="scale-150 mr-8 ml-1 transition-transform duration-300"
+                        :class="hidden ? '' : 'rotate-90'"
+                        width="7"
+                        height="13"
+                        viewBox="0 0 7 13"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        @click="flipWork"
+                    >
+                        <path
+                            d="M1 12L6 6.5L1 1"
+                            :stroke="hidden ? 'white' : '#18a0e4'"
+                            :stroke-width="hidden ? '1px' : '2px'"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+
+                    <span
+                        class="text-[115%] truncate transition-colors duration-150"
+                        :class="hidden ? 'font-normal text-white' : 'font-semibold text-[#18a0e4]'"
+                        @click.self="flipWork">
+                        {{ formatTitleDisplayKey(props.work.title, props.work.key.note, props.work.key.mode) }}
+                    </span>
+
+                    <div class="rounded-full bg-fg-more-lighter px-3 py-1.5 truncate">
+                        {{ formatCatalog(props.work.catalog) }}
+                    </div>
+
+                    <select
+                        v-model="selectedId"
+                        class="rounded-full bg-fg-more-lighter px-3 py-1.5 text-white cursor-pointer">
+                        <option
+                            v-for="rec in recs"
+                            :key="rec.id"
+                            :value="rec.id">
+                            {{ joinPerformers(rec.performers.map(p => p.performer)) }} ― {{ rec.year }}
+                        </option>
+                    </select>
+                </section>
+            </div>
+
+            <!-- Movements -->
+            <section
+                class="grid grid-cols-1 w-full justify-items-center transition-all duration-300"
+                v-show="!hidden">
+
+                <div
+                    v-for="(mov, index) in props.work.movements"
+                    :key="mov.id"
+                    class="
+                        flex rounded-full pl-[19.5px] pr-[1%] w-[98%] cursor-pointer py-2
+                        items-center justify-center hover:bg-[#3c3c3c] transition-colors duration-150
+                    " v-ripple>
+                    <section class="flex-1 space-x-5">
+                        <div class="inline-flex w-5 justify-center">
+                            <span class="!font-jetbrains">
+                                {{ toRoman(index + 1) }}
+                            </span>
+                        </div>
+                        <span>{{ formatMovement(mov) }}</span>
+                    </section>
+
+                    <span class="!font-jetbrains text-white font-light">
+                        {{ convertFormatTime(selectedRec.movements[index].audio_file.duration) }}
+                    </span>
+                </div>
+            </section>
+        </div>
+    </template>
+</template>

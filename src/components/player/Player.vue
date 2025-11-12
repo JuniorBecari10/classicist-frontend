@@ -35,34 +35,6 @@
     const composer = computed(() => work.value?.composer ?? null);
     const performers = computed(() => rec.value?.performers?.map(p => p.performer) ?? []);
     const imagePath = computed(() => rec.value?.photo_path ?? "");
-    const workMovement = computed(() => {
-        const w = work.value;
-        const mov = movement.value;
-        if (!w || !Array.isArray(w.movements) || !mov) return null;
-
-        const idx = mov.movement_index;
-        if (idx == null || idx < 0 || idx >= w.movements.length) return null;
-
-        return w.movements[idx];
-    });
-
-    // --- Sheet path reactive sync ---
-    const sheetPath = ref<string | null>(null);
-
-    watch(
-        () => [work.value, movement.value],
-        ([newWork, newMovement]) => {
-            if (!newWork || !Array.isArray(newWork.movements) || !newMovement) {
-                sheetPath.value = null;
-                return;
-            }
-
-            const idx = newMovement.movement_index;
-            const mv = newWork.movements[idx];
-            sheetPath.value = mv?.sheet?.path ?? null;
-        },
-        { immediate: true }
-    );
 
     // --- Update document title ---
     watch(
@@ -74,7 +46,7 @@
             }
 
             const prefix = store.isPlaying.value ? "▶ " : "";
-            const title = formatDisplayWork(displayWork.value);
+            const title = formatDisplayWork(displayWork.value, work.value.movements.length === 1);
             const authors = formatDisplayAuthors(composer.value, performers.value);
 
             document.title = `${prefix}${title} • ${authors} ― Classicist`;
@@ -158,7 +130,10 @@
     // --- Reactively reload audio on movement/recording change ---
     watch(
         () => [rec.value?.id, movement.value?.id],
-        async ([newRecId, newMovId], [oldRecId, oldMovId]) => {
+        async (newVals = [], oldVals = []) => {
+            const [newRecId, newMovId] = newVals || [];
+            const [oldRecId, oldMovId] = oldVals || [];
+
             if (!audio.value) return;
 
             const newSrc = getAudio();
@@ -234,6 +209,7 @@
                     :composer="composer"
                     :performers="performers"
                     :imageName="imagePath"
+                    :singleMov="work.movements.length === 1"
                 />
 
                 <Progress
@@ -250,8 +226,8 @@
 
                 <Controls
                     @volume="handleVolume"
-                    :lyrics="workMovement?.lyrics ?? null"
-                    :sheet="sheetPath"
+                    :lyrics="work.movements[store.currentMovementIndex].lyrics"
+                    :sheet="work.movements[store.currentMovementIndex].sheet.path"
                 />
             </div>
         </div>

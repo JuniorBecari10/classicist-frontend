@@ -10,11 +10,12 @@
         composer: Composer;
         performers: Performer[];
         imageName: string;
+        singleMov: boolean;
     }>();
 
     const showImage = ref(false);
 
-    const name = computed(() => formatDisplayWork(props.work));
+    const name = computed(() => formatDisplayWork(props.work, props.singleMov));
     const authors = computed(() => formatDisplayAuthors(props.composer, props.performers));
     const imagePath = computed(() => `${BACKEND_URL}/public/images/covers/${props.imageName}`);
 

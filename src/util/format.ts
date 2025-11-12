@@ -4,14 +4,18 @@ import type { Performer } from "@/model/recording.ts";
 import { KeyMode, Note } from "@/model/work.ts";
 import { convertDuration, type Time } from "./time.ts";
 
-export function formatDisplayWork(dw: DisplayWork): string {
-    return `${formatTitleDisplay(dw.title)} • ${toRoman(dw.movementNumber)}. ${
+export function formatDisplayWork(dw: DisplayWork, singleMov: boolean): string {
+    return `${formatTitleDisplay(dw.title)} • ${
+            singleMov
+                ? ""
+                : `${toRoman(dw.movementNumber)}. `
+        }${
         dw.form
             ? `${dw.form}: `
             : ""
     } ${joinTempoMarkings(dw.tempos)}${
         dw.nickname
-            ? ` • "${dw.nickname}"`
+            ? `• "${dw.nickname}"`
             : ""
     }`;
 }

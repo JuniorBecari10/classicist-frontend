@@ -51,7 +51,9 @@
     <div v-else-if="error" class="flex-1 bg-red-300 rounded-xl overflow-y-auto h-full" />
 
     <section v-else class="flex-1 bg-fg rounded-xl overflow-y-auto h-full">
-        <WorkHeader :work="props.work" :imagePath="recData?.imagePath" />
+        <WorkHeader
+            :work="props.work"
+            :imagePath="recData?.imagePath" />
         <WorkControls :work="props.work" :recs="recs" v-model="selectedRecId" />
         <MovementSelector
             v-if="recData && recData.rec"
