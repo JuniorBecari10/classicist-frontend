@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
+    import { ref, computed, onMounted, onUnmounted, defineEmits, watch } from "vue";
     import { convertFormatTime } from "@/util/format.ts";
     import { usePlayerStore } from "@/stores/player.ts";
 
@@ -32,6 +32,13 @@
     const hasPrevious = computed(() => current.value >= 1 || props.hasPrevious);
 
     let interval: number | undefined;
+
+    watch(
+        () => [store.currentRecording?.id, store.currentMovement?.id],
+        () => {
+            current.value = 0;
+        }
+    );
 
     onMounted(() => {
         addInterval();
