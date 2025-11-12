@@ -57,7 +57,6 @@
         player.clear();
         player.addRecording(recs.value.filter(rec => rec.id === selectedId.value)[0]);
         player.setMovIndex(index);
-        player.setPlaying(true);
     }
 
     const composerSplit = props.work.composer.name.split(" ");

@@ -155,6 +155,24 @@
         { immediate: true }
     );
 
+    watch(
+        () => store.isPlaying.value,
+        async (playing) => {
+            if (!audio.value) return;
+
+            try {
+                if (playing) {
+                    await audio.value.play();
+                } else {
+                    audio.value.pause();
+                }
+            } catch (err) {
+                console.warn("Audio play/pause failed:", err);
+            }
+        },
+        { immediate: true }
+    );
+
     // --- Keep store in sync with actual audio events ---
     onMounted(() => {
         if (!audio.value) return;

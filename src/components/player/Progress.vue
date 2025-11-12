@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import { ref, computed, onMounted, onUnmounted, defineEmits } from "vue";
     import { convertFormatTime } from "@/util/format.ts";
+    import { usePlayerStore } from "@/stores/player.ts";
+
     import ProgressBar from "../util/ProgressBar.vue";
     import Button from "../util/Button.vue";
 
@@ -18,9 +20,11 @@
         (e: "previous"): void;
         (e: "next"): void;
     }>();
+    
+    const store = usePlayerStore();
 
     const current = ref(0);
-    const paused = ref(true);
+    const paused = computed(() => !store.isPlaying);
 
     const percentage = computed(() => (current.value / props.length) * 100);
     const progressBar = ref<HTMLElement | null>(null);
@@ -71,12 +75,10 @@
     }
 
     function togglePause() {
-        paused.value = !paused.value;
-
         if (paused.value)
-            emit("pause");
-        else
             emit("play");
+        else
+            emit("pause");
     }
 
     function handleKey(e: KeyboardEvent) {

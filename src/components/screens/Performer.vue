@@ -55,7 +55,7 @@
         <section class="flex-1 h-full bg-fg rounded-lg">
             <div class="h-50 bg-cover bg-center bg-fixed rounded-lg">
                 <div
-                    class="h-full"
+                    class="h-full rounded-lg"
                     :style="{
                         background: `linear-gradient(0deg, #252525 0%, ${randomHexColor()} 100%)`,
                     }">

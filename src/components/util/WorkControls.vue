@@ -1,9 +1,11 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { computed } from "vue";
     import RecordingSelect from "../util/RecordingSelect.vue";
     import { useLibraryStore } from "@/stores/library.ts";
+    import { usePlayerStore } from "@/stores/player.ts";
 
     const lib = useLibraryStore();
+    const player = usePlayerStore();
 
     const selectedId = defineModel<number | null>({ default: null });
     const props = defineProps<{
@@ -11,20 +13,23 @@
         recs: Recording[];
     }>();
 
-    const paused = ref(false);
+    // playing is true when the player's current recording matches selectedId and playback is active
+    const playing = computed(() => {
+        // player.currentRecording might be null, player.isPlaying may be a ref
+        const currentRecId = player.currentRecording?.id ?? null;
+        const isPlaying = (player.isPlaying as any)?.value ?? player.isPlaying ?? false;
+
+        return currentRecId !== null && selectedId.value !== null && currentRecId === selectedId.value && Boolean(isPlaying);
+    });
 </script>
 
 <template>
     <div class="ml-6 -mt-12 mb-6 flex items-center gap-4">
-        <div class="rounded-full size-[55px] flex justify-center items-center gap-2 cursor-pointer" @click="paused = !paused" v-ripple>
-            <div class="
-                relative bg-[#18A0E4] rounded-full size-full text-[12px] flex justify-center items-center
-                hover:bg-[#42aee4] play transition-[background] duration-400" :class="{pause: paused}"
-            />
-        </div>
-
-        <button class="p-3 bg-fg-lighter hover:bg-fg-more-lighter rounded-full transition-[background] duration-200 cursor-pointer"
-            v-ripple @click="lib.addWork(props.work)">
+        <button
+            class="p-3 bg-fg-lighter hover:bg-fg-more-lighter rounded-full transition-[background] duration-200 cursor-pointer"
+            v-ripple
+            @click="lib.addWork(props.work)"
+        >
             <img src="@/assets/images/bookmark.png" />
         </button>
 
@@ -47,7 +52,7 @@
     .pause:before {
         height: 2em;
         border-width: 0 0 0 1.5em;
-        right: 18.5px
+        right: 18.5px;
     }
     
     .play:after {

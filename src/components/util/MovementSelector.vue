@@ -14,7 +14,6 @@
         player.clear();
         player.addRecording(props.rec);
         player.setMovIndex(index);
-        player.setPlaying(true);
     }
 </script>
 
