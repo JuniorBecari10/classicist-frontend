@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import { BACKEND_URL } from "@/util/consts.ts";
+    import WorkDisplay from "../util/WorkDisplay.vue";
     
     const props = defineProps<{
         composer: Composer;
@@ -15,7 +16,7 @@
 
 <template>
     <section class="flex-1 h-full bg-fg rounded-lg">
-        <div class="h-50 bg-cover bg-center bg-fixed"
+        <div class="h-50 bg-cover bg-center bg-fixed rounded-lg"
             :style="{ backgroundImage: `url('${photo}')` }">
             <div class="h-full bg-gradient-to-t from-fg to-black/30">
                 <div class="pt-5 pl-8">
@@ -26,5 +27,7 @@
                 </div>
             </div>
         </div>
+
+        <WorkDisplay />
     </section>
 </template>
